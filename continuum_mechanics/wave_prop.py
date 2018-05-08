@@ -207,5 +207,5 @@ def disp_incident_P(amp, omega, alpha, beta, ang_i, x, z):
 
 
 if __name__ ==  "__main__":
-    mat = scatter_matrix(2.0, 1.0, 0.0, 0.0)
-    print(mat)
+    import doctest
+    doctest.testmod()
