@@ -158,7 +158,7 @@ def lap(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     laplacian: Sympy expression
         Laplacian of phi.
     """
-    h = h_vec[0]*h_vec[1]*h_vec[2]
+    h = S(h_vec[0]*h_vec[1]*h_vec[2])
     return sum([1/h*diff(h/h_vec[k]**2*u.diff(coords[k]), coords[k])
                 for k in range(3)])
 
