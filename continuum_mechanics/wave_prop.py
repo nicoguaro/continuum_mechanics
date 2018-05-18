@@ -60,6 +60,55 @@ def scatter_matrix(alpha, beta, ang_i, ang_j):
     return scatter
 
 
+def scatter_matrix_micropolar(alpha, beta, ang_i, ang_j):
+    r"""
+    Scatter matrix for reflection/conversion coefficients
+    in an elastic halfspace
+    
+    The matrix is written as presented in [AKI2009]_.
+    
+    .. math::
+
+        \begin{bmatrix}
+            \acute{P}\grave{P} &\acute{P}\grave{S}\\
+            \acute{S}\grave{P} &\acute{S}\grave{S}
+        \end{bmatrix}
+
+    Parameters
+    ----------
+    alpha : float
+        Speed for the P-wave.
+    beta : float
+        Speed for the S-wave.
+    ang_i : ndarray
+        Incidence angle for the P-wave.
+    ang_j : ndarray
+        Incidence angle for the S-wave.
+
+    Returns
+    -------
+    scatter : ndarray
+        Scatter matrix for the reflection conversion modes.
+
+    References
+    ----------
+    
+    .. [AKI2009] Keiiti Aki and Paul G. Richards. Quantitative
+        Seismology. University Science Books, 2009.
+    """
+    p = sin(ang_i)/alpha
+    p1 = cos(ang_i)/alpha
+    p2 = cos(ang_j)/beta
+    denom = (1/beta**2 - 2*p**2)**2 + 4*p**2*p1*p2
+    PP = -(1/beta**2 - 2*p**2)**2 + 4*p**2*p1*p2
+    PS = 4*alpha/beta*p*p1*(1/beta**2 - 2*p**2)
+    SP = 4*beta/alpha*p*p2*(1/beta**2 - 2*p**2)
+    SS = (1/beta**2 - 2*p**2)**2 - 4*p**2*p1*p2
+    scatter = array([
+                [PP/denom, PS/denom],
+                [SP/denom, SS/denom]])
+    return scatter
+
 def ricker_spectrum(freq, freq_c):
     r"""Spectrum of the Ricker wavelet
     

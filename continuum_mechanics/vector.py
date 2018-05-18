@@ -84,6 +84,56 @@ def grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     return Matrix(3, 3, lambda i, j: (S(1)/h_vec[j])*A[i].diff(coords[j]))
 
 
+def sym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
+    """
+    Symmetric part of the gradient of a vector function A.
+    
+    Parameters
+    ----------
+    A : Matrix (3, 1), list
+        Vector function to compute the gradient from.
+    coords : Tuple (3), optional
+        Coordinates for the new reference system. This is an optional parameter
+        it takes (x, y, z) as default.
+    h_vec : Tuple (3), optional
+        Scale coefficients for the new coordinate system. It takes
+        (1, 1, 1), as default.
+        
+    Returns
+    -------
+    sym_grad: Matrix (3, 3)
+        Matrix with the components of the symmetric part of the gradient.
+        The position (i, j) has as components diff(A[i], coords[j].
+    """ 
+    G = grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1))
+    return S(1)/2*(G + G.T)
+
+
+def antisym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
+    """
+    Antisymmetric part of the gradient of a vector function A.
+    
+    Parameters
+    ----------
+    A : Matrix (3, 1), list
+        Vector function to compute the gradient from.
+    coords : Tuple (3), optional
+        Coordinates for the new reference system. This is an optional parameter
+        it takes (x, y, z) as default.
+    h_vec : Tuple (3), optional
+        Scale coefficients for the new coordinate system. It takes
+        (1, 1, 1), as default.
+        
+    Returns
+    -------
+    antisym_grad: Matrix (3, 3)
+        Matrix with the components of the antisymmetric part of the gradient.
+        The position (i, j) has as components diff(A[i], coords[j].
+    """ 
+    G = grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1))
+    return S(1)/2*(G - G.T)
+
+
 def div(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Divergence of the vector function A.
