@@ -7,7 +7,8 @@ from __future__ import division, print_function
 import sympy as sym
 from sympy import symbols, sin, cos, Abs
 from sympy import Matrix, simplify
-from continuum_mechanics.vector import (scale_coeff, grad, grad_vec, div,
+from continuum_mechanics.vector import (scale_coeff, levi_civita, dual_tensor,
+                                        dual_vector, grad, grad_vec, div,
                                         curl, lap, lap_vec)
 
 x, y, z = sym.symbols("x y z")
@@ -19,7 +20,34 @@ def test_scale_coeff():
     h_vec = scale_coeff(r_vec, coords)
     assert h_vec == (1, r, r*Abs(sin(theta)))
 
+#%%
+def test_levi_civita():
+    assert levi_civita(1, 2, 3) == 1
+    assert levi_civita(1, 3, 2) == -1
+    assert levi_civita(1, 1, 2) == 0
 
+
+def test_dual_tensor():
+    vector = Matrix([1, 2, 3])
+    tensor = Matrix([
+            [ 0,  3, -2],
+            [-3,  0,  1],
+            [ 2, -1,  0]])
+    assert dual_tensor(vector) == tensor
+    assert dual_vector(tensor) == vector
+
+
+def test_dual_vector():
+    tensor = Matrix([
+            [ 0,  3, -2],
+            [-3,  0,  1],
+            [ 2, -1,  0]])
+    vector = Matrix([1, 2, 3])
+    assert dual_vector(tensor) == vector
+    assert dual_tensor(vector) == tensor
+
+
+#%%
 def test_grad():
     gradient = grad(-(cos(x)**2 + cos(y)**2)**2)
     expected_gradient = Matrix([

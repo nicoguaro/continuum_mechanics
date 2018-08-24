@@ -5,7 +5,7 @@ Vector calculus module
 
 """
 from __future__ import division, print_function
-from sympy import simplify, Matrix, S, diff, symbols
+from sympy import simplify, Matrix, S, diff, symbols, zeros
 
 x, y, z = symbols("x y z")
 
@@ -36,7 +36,79 @@ def scale_coeff(r_vec, coords):
     h3 = simplify((r_vec.diff(u3)).norm())
     return h1, h2, h3
 
+#%% Vector analysis
+def levi_civita(i, j, k):
+    """Levi-Civita symbol"""
+    return (i - j)*(j - k)*(k - i)/S(2)
 
+
+def dual_tensor(vec):
+    r"""Compute the dual tensor for an axial vector
+
+    In index notation, the dual is defined by
+    
+    .. math::
+        
+        C_{ij} = \epsilon_{ijk} C_k
+
+    where :math:`\epsilon_{ijk}` is the Levi-Civita symbol.
+        
+    
+    Parameters
+    ----------
+    vec : SymPy expression
+        Axial vector.
+    
+    Returns
+    -------
+    dual: Matrix (3, 3)
+    Second order matrix that is dual of vec.
+
+    References
+    ----------
+
+    .. [ARFKEN] George Arfken, Hans J. Weber and Frank Harris.
+        Mathematical methods for physicists, Elsevier, 2013.
+
+    """
+    dual = zeros(3, 3)
+    for i in range(3):
+        for j in range(3):
+            for k in range(3):
+                dual[i,j] = dual[i, j] + levi_civita(i, j, k) * vec[k]       
+    return dual
+
+
+def dual_vector(tensor):
+    r"""Compute the dual (axial) vector for an anti-symmetric tensor
+
+    In index notation, the dual is defined by
+    
+    .. math::
+        
+        C_{i} = \frac{1}{2}\epsilon_{ijk} C_{jk}
+
+    where :math:`\epsilon_{ijk}` is the Levi-Civita symbol.
+
+    References
+    ----------
+
+    .. [ARFKEN] George Arfken, Hans J. Weber and Frank Harris.
+        Mathematical methods for physicists, Elsevier, 2013.
+
+    """
+    if not tensor.is_anti_symmetric():
+        raise TypeError("The tensor should be antisymmetric")
+    else:
+        dual = Matrix([0, 0, 0])
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    dual[i] = dual[i] + levi_civita(i, j, k) * tensor[j, k]
+        return dual/S(2)
+
+
+#%% Differential operators
 def grad(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Compute the gradient of a scalara function phi.
