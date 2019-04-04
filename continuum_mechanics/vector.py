@@ -6,13 +6,15 @@ Vector calculus module
 """
 from __future__ import division, print_function
 from sympy import simplify, Matrix, S, diff, symbols, zeros
+from sympy import sin, sinh, cos, cosh, sqrt
 
 x, y, z = symbols("x y z")
 
 
+#%% Curvilinear coordinates
 def scale_coeff(r_vec, coords):
     """
-    Compyte scale coefficients for the vector
+    Compute scale coefficients for the vector
     tranform given by r_vec.
     
     Parameters
@@ -35,6 +37,86 @@ def scale_coeff(r_vec, coords):
     h2 = simplify((r_vec.diff(u2)).norm())
     h3 = simplify((r_vec.diff(u3)).norm())
     return h1, h2, h3
+
+
+def scale_coeff_coords(coords, coord_sys, a=1, b=1, c=1):
+    """
+    Return scale factors for predefined coordinate system.
+    
+    Parameters
+    -------
+    coords : Tupl (3)
+        Coordinates for the new reference system.
+    coord_sys : string
+        Coordinate system.
+    a : SymPy expression, optional
+        Additional parameter for some coordinate systems.
+    b : SymPy expression, optional
+        Additional parameter for some coordinate systems.
+    c : SymPy expression, optional
+        Additional parameter for some coordinate systems.
+
+    Returns
+    -------
+    h_vec : Tuple (3)
+        Scale coefficients.
+
+    References
+    ----------
+    .. [ORTHO] Wikipedia contributors, 'Orthogonal coordinates',
+        Wikipedia, The Free Encyclopedia, 2019
+    """
+    if type(coord_sys) is not str:
+        raise TypeError("The coordinate system should be defined by a string")
+    u, v, w = coords
+    h_dict = {
+            "cartesian":
+                (1, 1, 1),
+            "cylindrical":
+                (1, u, 1),
+            "spherical":
+                (1, u, u*sin(v)),
+            "parabolic_cylindrical":
+                (sqrt(u**2 + v**2), sqrt(u**2 + v**2), 1),
+            "parabolic":
+                (sqrt(u**2 + v**2), sqrt(u**2 + v**2), u*v),
+            "paraboloidal":
+                (S(1)/2*sqrt((v - u)*(w - u))/((a**2 - u)*(b**2 - u)),
+                 S(1)/2*sqrt((w - v)*(u - v))/((a**2 - v)*(b**2 - v)),
+                 S(1)/2*sqrt((u - w)*(v - w))/((a**2 - w)*(b**2 - w))),
+            "elliptic_cylindrical":
+                (a*sqrt(sinh(u)**2 + sin(v)**2),
+                 a*sqrt(sinh(u)**2 + sin(v)**2), 1),
+            "oblate_spheroidal":
+                (a*sqrt(sinh(u)**2 + sin(v)**2),
+                 a*sqrt(sinh(u)**2 + sin(v)**2),
+                 a*sinh(u)*sin(v)),
+            "prolate_spheroidal":
+                (a*sqrt(sinh(u)**2 + sin(v)**2),
+                 a*sqrt(sinh(u)**2 + sin(v)**2),
+                 a*cosh(u)*cos(v)),
+            "ellipsoidal":
+                (S(1)/2*sqrt((v - u)*(w - u))/((a**2 - u)*(b**2 - u)*(c**2 - u)),
+                 S(1)/2*sqrt((w - v)*(u - v))/((a**2 - v)*(b**2 - v)*(c**2 - v)),
+                 S(1)/2*sqrt((u - w)*(v - w))/((a**2 - w)*(b**2 - w)*(c**2 - w))),
+            "bipolar_cylindrical":
+                (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)), 1),
+            "toroidal":
+                (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)),
+                 a*sinh(v)/(cosh(v) - cos(u))),
+            "bispherical":
+                 (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)),
+                 a*sin(v)/(cosh(v) - cos(u))),
+            "conical":
+                (1,
+                 u*sqrt((v**2 - w**2)/((v**2 - a**2)*(b**2 - b**2))),
+                 u*sqrt((v**2 - w**2)/((v**2 - a**2)*(b**2 - b**2))))
+            }
+    if coord_sys not in h_dict.keys():
+        msg = "System coordinate not available.\n\nAvailable options are:\n"
+        raise ValueError(msg + ", ".join(h_dict.keys()))
+    return h_dict[coord_sys]
+
 
 #%% Vector analysis
 def levi_civita(i, j, k):
@@ -336,3 +418,4 @@ def biharmonic(u, coords=(x, y, z), h_vec=(1, 1, 1)):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+    
