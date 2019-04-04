@@ -141,8 +141,8 @@ def grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     A : Matrix (3, 1), list
         Vector function to compute the gradient from.
     coords : Tuple (3), optional
-        Coordinates for the new reference system. This is an optional parameter
-        it takes (x, y, z) as default.
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
@@ -150,8 +150,8 @@ def grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     Returns
     -------
     gradient: Matrix (3, 3)
-        Matrix with the components of the gradient. The position (i, j) has
-        as components diff(A[i], coords[j].
+        Matrix with the components of the gradient. The position (i, j)
+        has as components diff(A[i], coords[j].
     """ 
     return Matrix(3, 3, lambda i, j: (S(1)/h_vec[j])*A[i].diff(coords[j]))
 
@@ -165,8 +165,8 @@ def sym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     A : Matrix (3, 1), list
         Vector function to compute the gradient from.
     coords : Tuple (3), optional
-        Coordinates for the new reference system. This is an optional parameter
-        it takes (x, y, z) as default.
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
@@ -190,8 +190,8 @@ def antisym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     A : Matrix (3, 1), list
         Vector function to compute the gradient from.
     coords : Tuple (3), optional
-        Coordinates for the new reference system. This is an optional parameter
-        it takes (x, y, z) as default.
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
@@ -199,8 +199,9 @@ def antisym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     Returns
     -------
     antisym_grad: Matrix (3, 3)
-        Matrix with the components of the antisymmetric part of the gradient.
-        The position (i, j) has as components diff(A[i], coords[j].
+        Matrix with the components of the antisymmetric part of
+        the gradient. The position (i, j) has as components
+        diff(A[i], coords[j].
     """ 
     G = grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1))
     return S(1)/2*(G - G.T)
@@ -215,8 +216,8 @@ def div(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     A : Matrix, list
         Scalar function to compute the divergence from.
     coords : Tuple (3), optional
-        Coordinates for the new reference system. This is an optional parameter
-        it takes (x, y, z) as default.
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
@@ -241,8 +242,8 @@ def curl(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     A : Matrix, List
         Vector function to compute the curl from.
     coords : Tuple (3), optional
-        Coordinates for the new reference system. This is an optional parameter
-        it takes (x, y, z) as default.
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
@@ -262,12 +263,12 @@ def curl(A, coords=(x, y, z), h_vec=(1, 1, 1)):
 
 def lap(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
-    Laplacian of the scalar function phi.
+    Laplacian of the scalar function u.
     
     Parameters
     ----------
     u : SymPy expression
-        Scalar function to compute the gradient from.
+        Scalar function to compute the laplacian from.
     coords : Tuple (3), optional
         Coordinates for the new reference system. This is an optional
         parameters, and it takes a cartesian (x, y, z), as default.
@@ -278,7 +279,7 @@ def lap(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     Returns
     -------
     laplacian: Sympy expression
-        Laplacian of phi.
+        Laplacian of u.
     """
     h = S(h_vec[0]*h_vec[1]*h_vec[2])
     return sum([1/h*diff(h/h_vec[k]**2*u.diff(coords[k]), coords[k])
@@ -292,10 +293,10 @@ def lap_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     Parameters
     ----------
     A : Matrix, List
-        Vector function to compute the curl from.
+        Vector function to compute the laplacian from.
     coords : Tuple (3), optional
-        Coordinates for the new reference system. This is an optional parameter
-        it takes (x, y, z) as default.
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
@@ -309,6 +310,28 @@ def lap_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
            curl(curl(A, coords=coords, h_vec=h_vec), coords=coords, h_vec=h_vec)
        
 
+
+def biharmonic(u, coords=(x, y, z), h_vec=(1, 1, 1)):
+    """
+    Bilaplacian of the scalar function u.
+    
+    Parameters
+    ----------
+    u : SymPy expression
+        Scalar function to compute the bilaplacian from.
+    coords : Tuple (3), optional
+        Coordinates for the new reference system. This is an optional
+        parameters, and it takes a cartesian (x, y, z), as default.
+    h_vec : Tuple (3), optional
+        Scale coefficients for the new coordinate system. It takes
+        (1, 1, 1), as default.
+        
+    Returns
+    -------
+    bilaplacian: Sympy expression
+        Bilaplacian of u.
+    """
+    return lap(lap(u, coords, h_vec), coords, h_vec)
 
 if __name__ == "__main__":
     import doctest
