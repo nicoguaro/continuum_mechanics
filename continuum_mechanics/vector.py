@@ -16,7 +16,7 @@ def scale_coeff(r_vec, coords):
     """
     Compute scale coefficients for the vector
     tranform given by r_vec.
-    
+
     Parameters
     -------
     r_vec : Matrix (3, 1)
@@ -24,13 +24,13 @@ def scale_coeff(r_vec, coords):
         u1, u2, u3.
     coords : Tupl (3)
         Coordinates for the new reference system.
-        
+
     Returns
     -------
     h_vec : Tuple (3)
         Scale coefficients.
     """
-    if type(r_vec) == list:
+    if isinstance(r_vec, list):
         r_vec = Matrix(r_vec)
     u1, u2, u3 = coords
     h1 = simplify((r_vec.diff(u1)).norm())
@@ -42,7 +42,7 @@ def scale_coeff(r_vec, coords):
 def scale_coeff_coords(coords, coord_sys, a=1, b=1, c=1):
     """
     Return scale factors for predefined coordinate system.
-    
+
     Parameters
     -------
     coords : Tupl (3)
@@ -66,52 +66,51 @@ def scale_coeff_coords(coords, coord_sys, a=1, b=1, c=1):
     .. [ORTHO] Wikipedia contributors, 'Orthogonal coordinates',
         Wikipedia, The Free Encyclopedia, 2019
     """
-    if type(coord_sys) is not str:
+    if not isinstance(coord_sys, str):
         raise TypeError("The coordinate system should be defined by a string")
     u, v, w = coords
     h_dict = {
-            "cartesian":
-                (1, 1, 1),
-            "cylindrical":
-                (1, u, 1),
-            "spherical":
-                (1, u, u*sin(v)),
-            "parabolic_cylindrical":
-                (sqrt(u**2 + v**2), sqrt(u**2 + v**2), 1),
-            "parabolic":
-                (sqrt(u**2 + v**2), sqrt(u**2 + v**2), u*v),
-            "paraboloidal":
-                (S(1)/2*sqrt((v - u)*(w - u))/((a**2 - u)*(b**2 - u)),
-                 S(1)/2*sqrt((w - v)*(u - v))/((a**2 - v)*(b**2 - v)),
-                 S(1)/2*sqrt((u - w)*(v - w))/((a**2 - w)*(b**2 - w))),
-            "elliptic_cylindrical":
-                (a*sqrt(sinh(u)**2 + sin(v)**2),
-                 a*sqrt(sinh(u)**2 + sin(v)**2), 1),
-            "oblate_spheroidal":
-                (a*sqrt(sinh(u)**2 + sin(v)**2),
-                 a*sqrt(sinh(u)**2 + sin(v)**2),
-                 a*sinh(u)*sin(v)),
-            "prolate_spheroidal":
-                (a*sqrt(sinh(u)**2 + sin(v)**2),
-                 a*sqrt(sinh(u)**2 + sin(v)**2),
-                 a*cosh(u)*cos(v)),
-            "ellipsoidal":
-                (S(1)/2*sqrt((v - u)*(w - u))/((a**2 - u)*(b**2 - u)*(c**2 - u)),
-                 S(1)/2*sqrt((w - v)*(u - v))/((a**2 - v)*(b**2 - v)*(c**2 - v)),
-                 S(1)/2*sqrt((u - w)*(v - w))/((a**2 - w)*(b**2 - w)*(c**2 - w))),
-            "bipolar_cylindrical":
-                (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)), 1),
-            "toroidal":
-                (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)),
-                 a*sinh(v)/(cosh(v) - cos(u))),
-            "bispherical":
-                 (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)),
-                 a*sin(v)/(cosh(v) - cos(u))),
-            "conical":
-                (1,
-                 u*sqrt((v**2 - w**2)/((v**2 - a**2)*(b**2 - b**2))),
-                 u*sqrt((v**2 - w**2)/((v**2 - a**2)*(b**2 - b**2))))
-            }
+        "cartesian":
+            (1, 1, 1),
+        "cylindrical":
+            (1, u, 1),
+        "spherical":
+            (1, u, u*sin(v)),
+        "parabolic_cylindrical":
+            (sqrt(u**2 + v**2), sqrt(u**2 + v**2), 1),
+        "parabolic":
+            (sqrt(u**2 + v**2), sqrt(u**2 + v**2), u*v),
+        "paraboloidal":
+            (S(1)/2*sqrt((v - u)*(w - u))/((a**2 - u)*(b**2 - u)),
+             S(1)/2*sqrt((w - v)*(u - v))/((a**2 - v)*(b**2 - v)),
+             S(1)/2*sqrt((u - w)*(v - w))/((a**2 - w)*(b**2 - w))),
+        "elliptic_cylindrical":
+            (a*sqrt(sinh(u)**2 + sin(v)**2),
+             a*sqrt(sinh(u)**2 + sin(v)**2), 1),
+        "oblate_spheroidal":
+            (a*sqrt(sinh(u)**2 + sin(v)**2),
+             a*sqrt(sinh(u)**2 + sin(v)**2),
+             a*sinh(u)*sin(v)),
+        "prolate_spheroidal":
+            (a*sqrt(sinh(u)**2 + sin(v)**2),
+             a*sqrt(sinh(u)**2 + sin(v)**2),
+             a*cosh(u)*cos(v)),
+        "ellipsoidal":
+            (S(1)/2*sqrt((v - u)*(w - u))/((a**2 - u)*(b**2 - u)*(c**2 - u)),
+             S(1)/2*sqrt((w - v)*(u - v))/((a**2 - v)*(b**2 - v)*(c**2 - v)),
+             S(1)/2*sqrt((u - w)*(v - w))/((a**2 - w)*(b**2 - w)*(c**2 - w))),
+        "bipolar_cylindrical":
+            (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)), 1),
+        "toroidal":
+            (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)),
+             a*sinh(v)/(cosh(v) - cos(u))),
+        "bispherical":
+            (a/(cosh(v) - cos(u)), a/(cosh(v) - cos(u)),
+             a*sin(v)/(cosh(v) - cos(u))),
+        "conical":
+            (1,
+             u*sqrt((v**2 - w**2)/((v**2 - a**2)*(b**2 - b**2))),
+             u*sqrt((v**2 - w**2)/((v**2 - a**2)*(b**2 - b**2))))}
     if coord_sys not in h_dict.keys():
         msg = "System coordinate not available.\n\nAvailable options are:\n"
         raise ValueError(msg + ", ".join(h_dict.keys()))
@@ -130,17 +129,17 @@ def dual_tensor(vec):
     In index notation, the dual is defined by
     
     .. math::
-        
+
         C_{ij} = \epsilon_{ijk} C_k
 
     where :math:`\epsilon_{ijk}` is the Levi-Civita symbol.
-        
-    
+
+
     Parameters
     ----------
     vec : SymPy expression
         Axial vector.
-    
+
     Returns
     -------
     dual: Matrix (3, 3)
@@ -157,7 +156,7 @@ def dual_tensor(vec):
     for i in range(3):
         for j in range(3):
             for k in range(3):
-                dual[i,j] = dual[i, j] + levi_civita(i, j, k) * vec[k]       
+                dual[i, j] = dual[i, j] + levi_civita(i, j, k) * vec[k] 
     return dual
 
 
@@ -165,9 +164,9 @@ def dual_vector(tensor):
     r"""Compute the dual (axial) vector for an anti-symmetric tensor
 
     In index notation, the dual is defined by
-    
+
     .. math::
-        
+
         C_{i} = \frac{1}{2}\epsilon_{ijk} C_{jk}
 
     where :math:`\epsilon_{ijk}` is the Levi-Civita symbol.
@@ -205,7 +204,7 @@ def grad(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     gradient: Matrix (3, 1)
@@ -217,7 +216,7 @@ def grad(u, coords=(x, y, z), h_vec=(1, 1, 1)):
 def grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Gradient of a vector function A.
-    
+
     Parameters
     ----------
     A : Matrix (3, 1), list
@@ -228,20 +227,20 @@ def grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     gradient: Matrix (3, 3)
         Matrix with the components of the gradient. The position (i, j)
         has as components diff(A[i], coords[j].
-    """ 
+    """
     return Matrix(3, 3, lambda i, j: (S(1)/h_vec[j])*A[i].diff(coords[j]))
 
 
 def sym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Symmetric part of the gradient of a vector function A.
-    
+
     Parameters
     ----------
     A : Matrix (3, 1), list
@@ -252,21 +251,21 @@ def sym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     sym_grad: Matrix (3, 3)
         Matrix with the components of the symmetric part of the gradient.
         The position (i, j) has as components diff(A[i], coords[j].
-    """ 
-    G = grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1))
+    """
+    G = grad_vec(A, coords, h_vec)
     return S(1)/2*(G + G.T)
 
 
 def antisym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Antisymmetric part of the gradient of a vector function A.
-    
+
     Parameters
     ----------
     A : Matrix (3, 1), list
@@ -277,22 +276,22 @@ def antisym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     antisym_grad: Matrix (3, 3)
         Matrix with the components of the antisymmetric part of
         the gradient. The position (i, j) has as components
         diff(A[i], coords[j].
-    """ 
-    G = grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1))
+    """
+    G = grad_vec(A, coords, h_vec)
     return S(1)/2*(G - G.T)
 
 
 def div(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Divergence of the vector function A.
-    
+
     Parameters
     ----------
     A : Matrix, list
@@ -303,22 +302,22 @@ def div(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     divergence: SymPy expression
         Divergence of A.
-    """  
+    """
     h = h_vec[0]*h_vec[1]*h_vec[2]
     aux = simplify((S(1)/h)*sum(diff(A[k]*h/h_vec[k], coords[k])
                                 for k in range(3)))
-    return aux 
+    return aux
 
 
 def curl(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Curl of a function vector A.
-    
+
     Parameters
     ----------
     A : Matrix, List
@@ -334,19 +333,19 @@ def curl(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     -------
     curl : Matrix (3, 1)
         Column vector with the curl of A.
-    """  
+    """
     perm = lambda i, j, k: (i - j)*(j - k)*(k - i)/S(2)
     h = h_vec[0]*h_vec[1]*h_vec[2]
     aux = [(S(1)/h)*sum(perm(i, j, k)*h_vec[i]*diff(A[k]*h_vec[k], coords[j])
-           for j in range(3) for k in range(3))
-           for i in range(3)]
-    return Matrix(aux)  
+                        for j in range(3) for k in range(3))
+                        for i in range(3)]
+    return Matrix(aux)
 
 
 def lap(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Laplacian of the scalar function u.
-    
+
     Parameters
     ----------
     u : SymPy expression
@@ -357,7 +356,7 @@ def lap(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     laplacian: Sympy expression
@@ -371,7 +370,7 @@ def lap(u, coords=(x, y, z), h_vec=(1, 1, 1)):
 def lap_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Laplacian of a vector function A.
-    
+
     Parameters
     ----------
     A : Matrix, List
@@ -382,21 +381,20 @@ def lap_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     laplacian : Matrix (3, 1)
         Column vector with the components of the Laplacian.
-    """  
-    return grad(div(A, coords=coords, h_vec=h_vec), coords=coords, h_vec=h_vec) -\
-           curl(curl(A, coords=coords, h_vec=h_vec), coords=coords, h_vec=h_vec)
-       
+    """
+    return grad(div(A, coords, h_vec), coords, h_vec) \
+           - curl(curl(A, coords, h_vec), coords, h_vec)
 
 
 def biharmonic(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Bilaplacian of the scalar function u.
-    
+
     Parameters
     ----------
     u : SymPy expression
@@ -407,7 +405,7 @@ def biharmonic(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     h_vec : Tuple (3), optional
         Scale coefficients for the new coordinate system. It takes
         (1, 1, 1), as default.
-        
+
     Returns
     -------
     bilaplacian: Sympy expression
@@ -415,7 +413,7 @@ def biharmonic(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     return lap(lap(u, coords, h_vec), coords, h_vec)
 
+#%%
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    
