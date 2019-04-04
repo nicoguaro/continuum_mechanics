@@ -12,7 +12,7 @@ from continuum_mechanics.vector import (grad, div, curl, lap_vec, grad_vec,
 x, y, z = symbols("x y z")
 
 #%% Classic elasticity
-def navier_cauchy(u, lamda, mu, coords=(x, y, z), h_vec=(1, 1, 1)):
+def navier_cauchy(u, params, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Navier-Cauchy operator of a vector function u.
 
@@ -37,6 +37,7 @@ def navier_cauchy(u, lamda, mu, coords=(x, y, z), h_vec=(1, 1, 1)):
         Components of the Navier-Cauchy operator applied to the
         displacement vector.
     """
+    lamda, mu = params
     u = Matrix(u)
     term1 = (lamda + 2*mu) * grad(div(u, coords, h_vec), coords, h_vec)
     term2 = mu * curl(curl(u, coords, h_vec), coords, h_vec)

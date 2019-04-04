@@ -22,7 +22,8 @@ def test_navier_op():
          0, 0]
     lamda = E*nu/((1 + nu)*(1 - 2*nu))
     mu = E/(2*(1 + nu))
-    b = navier_cauchy(u, lamda, mu, coords, h_vec)
+    params = lamda, mu
+    b = navier_cauchy(u, params, coords, h_vec)
     b_anal = Matrix([
             [-Omega**2*r*rho],
             [              0],
@@ -40,7 +41,8 @@ def test_c_cst():
          0, 0]
     lamda = E*nu/((1 + nu)*(1 - 2*nu))
     mu = E/(2*(1 + nu))
-    b = c_cst(u, lamda, mu, eta, coords, h_vec)
+    params = lamda, mu, eta
+    b = c_cst(u, params, coords, h_vec)
     b_anal = Matrix([
             [-Omega**2*r*rho],
             [              0],
