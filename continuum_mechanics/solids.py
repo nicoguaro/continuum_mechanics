@@ -11,6 +11,7 @@ from continuum_mechanics.vector import (grad, div, curl, lap_vec, grad_vec,
 
 x, y, z = symbols("x y z")
 
+
 #%% Classic elasticity
 def navier_cauchy(u, params, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
@@ -72,6 +73,7 @@ def strain_stress(strain, parameters):
     stress = Matrix(3, 3, lambda i, j:
                     lamda*eye(3)[i, j] * strain_trace + 2*mu * strain[j, i])
     return stress
+
 
 #%% Micropolar elasticity
 def micropolar(u, phi, parameters, coords=(x, y, z), h_vec=(1, 1, 1)):
@@ -236,7 +238,7 @@ def c_cst(u, parameters, coords=(x, y, z), h_vec=(1, 1, 1)):
     return simplify(term1 - term2 + term3)
 
 
-def disp_def_cst(u, coords, h_vec):
+def disp_def_cst(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Compute strain measures for C-CST elasticity, as defined
     in [CST]_.
