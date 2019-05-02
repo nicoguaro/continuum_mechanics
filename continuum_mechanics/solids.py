@@ -174,8 +174,31 @@ def disp_def_micropolar(u, phi, coords, h_vec):
 
 def strain_stress_micropolar(strain, curvature, constants):
     """
-    Return the stress tensor for a given strain tensor
-    and material properties lambda and mu
+    Return the force-stress and couple-stress tensor for
+    given strain and curvature tensors and material
+    parameters.
+    
+    Parameters
+    ----------
+    strain : Matrix (3, 3)
+        Strain tensor.
+    curvature : Matrix (3, 3)
+        Curvature tensor.
+    constants : tuple
+        Material parameters in the following order:
+
+        lamda : float
+            Lamé's first parameter.
+        mu : float, > 0
+            Lamé's second parameter.
+        alpha : float, > 0
+            Micropolar parameter.
+        beta : float
+            Micropolar parameter.
+        gamma : float, > 0
+            Micropolar parameter.
+        epsilon : float, > 0
+            Micropolar parameter.
     """
     mu, lamda, alpha, beta, gamma, epsilon = constants
     strain_trace = strain.trace()
@@ -270,6 +293,39 @@ def disp_def_cst(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     strain = sym_grad(u, coords, h_vec)
     curvature = S(1)/4 * curl(curl(u, coords, h_vec), coords, h_vec)
     return strain, dual_tensor(curvature)
+
+
+def strain_stress_cst(strain, curvature, constants):
+    """
+    Return the force-stress and couple-stress tensor for
+    given strain and curvature tensors and material 
+    parameters for the Corrected-Couple-Stress-Theory
+    (C-CST), as presented in [CST]_.
+    
+    Parameters
+    ----------
+    strain : Matrix (3, 3)
+        Strain tensor.
+    curvature : Matrix (3, 3)
+        Curvature tensor.
+    constants : tuple
+        Material parameters in the following order:
+
+        lamda : float
+            Lamé's first parameter.
+        mu : float, > 0
+            Lamé's second parameter.
+        eta : float, >0
+            Couple stress modulus in C-CST.
+    """
+    mu, lamda, eta = constants
+    strain_trace = strain.trace()
+    force_stress = Matrix(3, 3, lambda i, j:
+                          lamda*eye(3)[i, j] * strain_trace
+                          + (mu + alpha) * strain[j, i]
+                          + (mu - alpha) * strain[i, j])
+    couple_stress = -8*eta*curvature
+    return force_stress, couple_stress
 
 
 #%%
