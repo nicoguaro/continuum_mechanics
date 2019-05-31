@@ -413,6 +413,7 @@ def biharmonic(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     return lap(lap(u, coords, h_vec), coords, h_vec)
 
+
 #%%
 if __name__ == "__main__":
     import doctest
