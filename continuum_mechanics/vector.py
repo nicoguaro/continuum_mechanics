@@ -12,6 +12,85 @@ x, y, z = symbols("x y z")
 
 
 #%% Curvilinear coordinates
+def transform_coords(coord_sys, coords, a=1, b=1, c=1):
+    """
+    Return scale factors for predefined coordinate system.
+
+    Parameters
+    -------
+    coord_sys : string
+        Coordinate system.
+    coords : Tuple (3)
+        Coordinates for the new reference system.
+    a : SymPy expression, optional
+        Additional parameter for some coordinate systems.
+    b : SymPy expression, optional
+        Additional parameter for some coordinate systems.
+    c : SymPy expression, optional
+        Additional parameter for some coordinate systems.
+
+    Returns
+    -------
+    h_vec : Tuple (3)
+        Scale coefficients.
+
+    References
+    ----------
+    .. [ORTHO] Wikipedia contributors, 'Orthogonal coordinates',
+        Wikipedia, The Free Encyclopedia, 2019
+    """
+    if not isinstance(coord_sys, str):
+        raise TypeError("The coordinate system should be defined by a string")
+    u, v, w = coords
+    r_dict = {
+        "cartesian":
+            (u, v, w),
+        "cylindrical":
+            (u*cos(v), u*sin(v), w),
+        "spherical":
+            (u*sin(v)*cos(w), u*sin(v)*sin(w), u*sin(v)),
+        "parabolic_cylindrical":
+            ((u**2 - v**2)/2, u*v, w),
+        "parabolic":
+            (u*v*cos(w), u*v*sin(w), (u**2 - v**2)/2),
+        "paraboloidal":
+            (sqrt((a**2 - u)*(a**2 - v)*(a**2 - w)/(b**2 - a**2)),
+             sqrt((b**2 - u)*(b**2 - v)*(b**2 - w)/(a**2 - b**2)),
+             S(1)/2*(a**2 + b**2 - u - v - w)),
+        "elliptic_cylindrical":
+            (a*cosh(u)*cos(v), a*sinh(u)*sin(v), w),
+        "oblate_spheroidal":
+            (a*cosh(u)*cos(v)*cos(w),
+             a*cosh(u)*cos(v)*sin(w),
+             a*sinh(u)*sin(v)),
+        "prolate_spheroidal":
+            (a*sinh(u)*sin(v)*cos(w),
+             a*sinh(u)*sin(v)*sin(w),
+             a*cosh(u)*cos(v)),
+        "ellipsoidal":
+            (sqrt((a**2 + u)*(a**2 + v)*(a**2 + w)/((a**2 - b**2)*(a**2 - c**2))),
+             sqrt((b**2 + u)*(b**2 + v)*(b**2 + w)/((b**2 - a**2)*(b**2 - c**2))),
+             sqrt((c**2 + u)*(c**2 + v)*(c**2 + w)/((c**2 - b**2)*(c**2 - a**2)))),
+        "bipolar_cylindrical":
+            (a*sinh(v)/(cosh(v) - cos(u)), a*sin(u)/(cosh(v) - cos(u)), w),
+        "toroidal":
+            (a*sinh(v)*cos(w)/(cosh(v) - cos(u)),
+             a*sinh(v)*sin(w)/(cosh(v) - cos(u)),
+             a*sin(u)/(cosh(v) - cos(u))),
+        "bispherical":
+            (a*sin(u)*cos(w)/(cosh(v) - cos(u)),
+             a*sin(u)*sin(w)/(cosh(v) - cos(u)),
+             a*sinh(v)/(cosh(v) - cos(u))),
+        "conical":
+            (u*v*w/(a*b),
+             u/a*sqrt((v**2 - a**2)*(w**2 - a**2)/(a**2 - b**2)),
+             u/b*sqrt((v**2 - b**2)*(w**2 - b**2)/(a**2 - b**2)))}
+    if coord_sys not in r_dict.keys():
+        msg = "System coordinate not available.\n\nAvailable options are:\n"
+        raise ValueError(msg + ", ".join(r_dict.keys()))
+    return r_dict[coord_sys]
+
+
 def scale_coeff(r_vec, coords):
     """
     Compute scale coefficients for the vector
@@ -22,7 +101,7 @@ def scale_coeff(r_vec, coords):
     r_vec : Matrix (3, 1)
         Transform vector (x, y, z) as a function of coordinates
         u1, u2, u3.
-    coords : Tupl (3)
+    coords : Tuple (3)
         Coordinates for the new reference system.
 
     Returns
@@ -39,16 +118,16 @@ def scale_coeff(r_vec, coords):
     return h1, h2, h3
 
 
-def scale_coeff_coords(coords, coord_sys, a=1, b=1, c=1):
+def scale_coeff_coords(coord_sys, coords, a=1, b=1, c=1):
     """
     Return scale factors for predefined coordinate system.
 
     Parameters
     -------
-    coords : Tupl (3)
-        Coordinates for the new reference system.
     coord_sys : string
         Coordinate system.
+    coords : Tuple (3)
+        Coordinates for the new reference system.
     a : SymPy expression, optional
         Additional parameter for some coordinate systems.
     b : SymPy expression, optional
@@ -127,7 +206,7 @@ def dual_tensor(vec):
     r"""Compute the dual tensor for an axial vector
 
     In index notation, the dual is defined by
-    
+
     .. math::
 
         C_{ij} = \epsilon_{ijk} C_k
@@ -156,7 +235,7 @@ def dual_tensor(vec):
     for i in range(3):
         for j in range(3):
             for k in range(3):
-                dual[i, j] = dual[i, j] + levi_civita(i, j, k) * vec[k] 
+                dual[i, j] = dual[i, j] + levi_civita(i, j, k) * vec[k]
     return dual
 
 
@@ -337,8 +416,8 @@ def curl(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     perm = lambda i, j, k: (i - j)*(j - k)*(k - i)/S(2)
     h = h_vec[0]*h_vec[1]*h_vec[2]
     aux = [(S(1)/h)*sum(perm(i, j, k)*h_vec[i]*diff(A[k]*h_vec[k], coords[j])
-                        for j in range(3) for k in range(3))
-                        for i in range(3)]
+           for j in range(3) for k in range(3))
+           for i in range(3)]
     return Matrix(aux)
 
 

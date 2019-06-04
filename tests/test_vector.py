@@ -13,12 +13,14 @@ from continuum_mechanics.vector import (scale_coeff, levi_civita, dual_tensor,
 
 x, y, z = sym.symbols("x y z")
 
+
 def test_scale_coeff():
     r, theta, phi = sym.symbols("r theta phi", positive=True)
     r_vec = [r*sin(theta)*cos(phi), r*sin(theta)*sin(phi), r*cos(theta)]
     coords = [r, theta, phi]
     h_vec = scale_coeff(r_vec, coords)
     assert h_vec == (1, r, r*Abs(sin(theta)))
+
 
 #%%
 def test_levi_civita():
