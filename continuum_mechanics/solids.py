@@ -68,7 +68,7 @@ def strain_stress(strain, parameters):
     disp_op : Matrix (3, 1)
         Displacement components.
     """
-    mu, lamda = parameters
+    lamda, mu = parameters
     strain_trace = strain.trace()
     stress = Matrix(3, 3, lambda i, j:
                     lamda*eye(3)[i, j] * strain_trace + 2*mu * strain[j, i])
@@ -129,7 +129,7 @@ def micropolar(u, phi, parameters, coords=(x, y, z), h_vec=(1, 1, 1)):
     u_op = (lamda + 2*mu) * grad(div(u, coords, h_vec), coords, h_vec) \
          - (mu - alpha) * curl(curl(u, coords, h_vec), coords, h_vec) \
          + 2*alpha*curl(phi, coords, h_vec)
-    phi_op = (beta - 2*gamma) * curl(curl(phi, coords, h_vec), coords, h_vec)\
+    phi_op = (beta + 2*gamma) * grad(div(phi, coords, h_vec), coords, h_vec)\
            - (gamma - epsilon) * curl(curl(phi, coords, h_vec), coords, h_vec)\
            + 2*alpha*curl(u, coords, h_vec) - 4*alpha*phi
     return simplify(u_op), simplify(phi_op)
@@ -160,12 +160,6 @@ def disp_def_micropolar(u, phi, coords, h_vec):
         Strain tensor.
     curvature : Matrix (3, 3)
         Curvature tensor.
-
-    References
-    ----------
-    .. [NOW] Witold Nowacki. Theory of micropolar elasticity.
-        International centre for mechanical sciences,
-        Courses and lectures, No. 25. Berlin: Springer, 1972.
     """
     strain = grad_vec(u, coords, h_vec) - dual_tensor(phi)
     curvature = grad_vec(phi, coords, h_vec)
@@ -230,7 +224,7 @@ def c_cst(u, parameters, coords=(x, y, z), h_vec=(1, 1, 1)):
             Lamé's first parameter.
         mu : float, > 0
             Lamé's second parameter.
-        eta : float, >0
+        eta : float, > 0
             Couple stress modulus in C-CST.
     coords : Tuple (3), optional
         Coordinates for the new reference system. This is an optional
@@ -283,12 +277,6 @@ def disp_def_cst(u, coords=(x, y, z), h_vec=(1, 1, 1)):
         Strain tensor.
     curvature : Matrix (3, 3)
         Curvature tensor.
-
-    References
-    ----------
-    .. [CST] Ali R. Hadhesfandiari, Gary F. Dargush.
-        Couple stress theory for solids. International Journal
-        for Solids and Structures, 2011, 48, 2496-2510.
     """
     strain = sym_grad(u, coords, h_vec)
     curvature = S(1)/4 * curl(curl(u, coords, h_vec), coords, h_vec)
@@ -315,15 +303,13 @@ def strain_stress_cst(strain, curvature, constants):
             Lamé's first parameter.
         mu : float, > 0
             Lamé's second parameter.
-        eta : float, >0
+        eta : float, > 0
             Couple stress modulus in C-CST.
     """
     mu, lamda, eta = constants
     strain_trace = strain.trace()
     force_stress = Matrix(3, 3, lambda i, j:
-                          lamda*eye(3)[i, j] * strain_trace
-                          + (mu + alpha) * strain[j, i]
-                          + (mu - alpha) * strain[i, j])
+                   lamda*eye(3)[i, j] * strain_trace + 2*mu * strain[j, i])
     couple_stress = -8*eta*curvature
     return force_stress, couple_stress
 
