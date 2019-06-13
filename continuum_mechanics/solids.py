@@ -135,7 +135,7 @@ def micropolar(u, phi, parameters, coords=(x, y, z), h_vec=(1, 1, 1)):
     return simplify(u_op), simplify(phi_op)
 
 
-def disp_def_micropolar(u, phi, coords, h_vec):
+def disp_def_micropolar(u, phi, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Compute strain measures for micropolar elasticity, as defined
     in [NOW]_.
