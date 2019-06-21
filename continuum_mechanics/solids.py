@@ -127,10 +127,10 @@ def micropolar(u, phi, parameters, coords=(x, y, z), h_vec=(1, 1, 1)):
     u = Matrix(u)
     phi = Matrix(phi)
     u_op = (lamda + 2*mu) * grad(div(u, coords, h_vec), coords, h_vec) \
-         - (mu - alpha) * curl(curl(u, coords, h_vec), coords, h_vec) \
+         - (mu + alpha) * curl(curl(u, coords, h_vec), coords, h_vec) \
          + 2*alpha*curl(phi, coords, h_vec)
     phi_op = (beta + 2*gamma) * grad(div(phi, coords, h_vec), coords, h_vec)\
-           - (gamma - epsilon) * curl(curl(phi, coords, h_vec), coords, h_vec)\
+           - (gamma + epsilon) * curl(curl(phi, coords, h_vec), coords, h_vec)\
            + 2*alpha*curl(u, coords, h_vec) - 4*alpha*phi
     return simplify(u_op), simplify(phi_op)
 
