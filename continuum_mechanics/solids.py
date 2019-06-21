@@ -13,7 +13,7 @@ x, y, z = symbols("x y z")
 
 
 #%% Classic elasticity
-def navier_cauchy(u, params, coords=(x, y, z), h_vec=(1, 1, 1)):
+def navier_cauchy(u, parameters, coords=(x, y, z), h_vec=(1, 1, 1)):
     """
     Navier-Cauchy operator of a vector function u.
 
@@ -21,10 +21,13 @@ def navier_cauchy(u, params, coords=(x, y, z), h_vec=(1, 1, 1)):
     ----------
     u : Matrix (3, 1), list
         Vector function to apply the Navier-Cauchy operator.
-    lamda : float
-        Lamé's first parameter.
-    mu : float, > 0
-        Lamé's second parameter.
+    parameters : tuple
+        Material parameters in the following order:
+
+        lamda : float
+            Lamé's first parameter.
+        mu : float, > 0
+            Lamé's second parameter.
     coords : Tuple (3), optional
         Coordinates for the new reference system. This is an optional
         parameter it takes (x, y, z) as default.
@@ -38,7 +41,7 @@ def navier_cauchy(u, params, coords=(x, y, z), h_vec=(1, 1, 1)):
         Components of the Navier-Cauchy operator applied to the
         displacement vector.
     """
-    lamda, mu = params
+    lamda, mu = parameters
     u = Matrix(u)
     term1 = (lamda + 2*mu) * grad(div(u, coords, h_vec), coords, h_vec)
     term2 = mu * curl(curl(u, coords, h_vec), coords, h_vec)
@@ -166,7 +169,7 @@ def disp_def_micropolar(u, phi, coords=(x, y, z), h_vec=(1, 1, 1)):
     return strain, curvature
 
 
-def strain_stress_micropolar(strain, curvature, constants):
+def strain_stress_micropolar(strain, curvature, parameters):
     """
     Return the force-stress and couple-stress tensor for
     given strain and curvature tensors and material
@@ -178,7 +181,7 @@ def strain_stress_micropolar(strain, curvature, constants):
         Strain tensor.
     curvature : Matrix (3, 3)
         Curvature tensor.
-    constants : tuple
+    parameters : tuple
         Material parameters in the following order:
 
         lamda : float
@@ -194,7 +197,7 @@ def strain_stress_micropolar(strain, curvature, constants):
         epsilon : float, > 0
             Micropolar parameter.
     """
-    mu, lamda, alpha, beta, gamma, epsilon = constants
+    lamda, mu, alpha, beta, gamma, epsilon = parameters
     strain_trace = strain.trace()
     curv_trace = curvature.trace()
     force_stress = Matrix(3, 3, lambda i, j:
@@ -283,7 +286,7 @@ def disp_def_cst(u, coords=(x, y, z), h_vec=(1, 1, 1)):
     return strain, dual_tensor(curvature)
 
 
-def strain_stress_cst(strain, curvature, constants):
+def strain_stress_cst(strain, curvature, parameters):
     """
     Return the force-stress and couple-stress tensor for
     given strain and curvature tensors and material 
@@ -296,7 +299,7 @@ def strain_stress_cst(strain, curvature, constants):
         Strain tensor.
     curvature : Matrix (3, 3)
         Curvature tensor.
-    constants : tuple
+    parameters : tuple
         Material parameters in the following order:
 
         lamda : float
@@ -306,7 +309,7 @@ def strain_stress_cst(strain, curvature, constants):
         eta : float, > 0
             Couple stress modulus in C-CST.
     """
-    mu, lamda, eta = constants
+    lamda, mu, eta = parameters
     strain_trace = strain.trace()
     force_stress = Matrix(3, 3, lambda i, j:
                    lamda*eye(3)[i, j] * strain_trace + 2*mu * strain[j, i])
