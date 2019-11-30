@@ -5,7 +5,7 @@ Vector calculus module
 
 """
 from __future__ import division, print_function
-from sympy import simplify, Matrix, S, diff, symbols, zeros
+from sympy import simplify, Matrix, S, diff, symbols, zeros, eye
 from sympy import sin, sinh, cos, cosh, sqrt
 
 x, y, z = symbols("x y z")
@@ -196,6 +196,61 @@ def scale_coeff_coords(coord_sys, coords, a=1, b=1, c=1):
     return h_dict[coord_sys]
 
 
+def unit_vec_deriv(vec_i, coord_j, coords=(x, y, z), h_vec=(1, 1, 1)):
+    r"""
+    Compute the derivatives of unit vectors with respect
+    to coordinates
+
+    The derivative is defined as
+
+    .. math::
+
+        \frac{\partial{\hat{\mathbf{e}}_i}}{\partial u_j} =
+        \begin{cases} 
+        \hat{\mathbf{e}_j} \frac{1}{h_i} \frac{\partial{h_j}}{\partial u_i}
+          &\text{if } i\neq j\\
+        -\sum_{\substack{k=1\\ k\neq i}}^3 \hat{\mathbf{e}_k} \frac{1}{h_k}
+           \frac{\partial{h_i}}{\partial u_k} &\text{if } i = j\\
+        \end{cases}\, ,
+
+    as presented in [ARFKEN]_.
+
+    Parameters
+    ----------
+    vec_i : int
+        Number of the unit vector (0, 1, 2).
+    coord_j : int
+        Number of the coordinate (0, 1, 2).
+    coords : Tuple (3), optional
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
+    h_vec : Tuple (3), optional
+        Scale coefficients for the new coordinate system. It takes
+        (1, 1, 1), as default.
+
+    Returns
+    -------
+    deriv: Matrix (3, 1)
+        Derivative of the i-th unit vector with respect to the
+        j-th coordinate.
+
+    References
+    ----------
+
+    .. [ARFKEN] George Arfken, Hans J. Weber and Frank Harris.
+        Mathematical methods for physicists, Elsevier, 2013.
+
+    """
+    deriv = zeros(3, 1)
+    if vec_i != coord_j:
+        deriv[coord_j] = diff(h_vec[coord_j], coords[vec_i])/h_vec[vec_i]
+    else:
+        for cont in range(3):
+            if cont != vec_i:
+                deriv[cont] = -diff(h_vec[vec_i], coords[cont])/h_vec[cont]
+    return deriv
+
+
 #%% Vector analysis
 def levi_civita(i, j, k):
     """Levi-Civita symbol"""
@@ -216,13 +271,13 @@ def dual_tensor(vec):
 
     Parameters
     ----------
-    vec : SymPy expression
+    vec : Matrix (3)
         Axial vector.
 
     Returns
     -------
     dual: Matrix (3, 3)
-    Second order matrix that is dual of vec.
+        Second order matrix that is dual of vec.
 
     References
     ----------
@@ -249,6 +304,16 @@ def dual_vector(tensor):
         C_{i} = \frac{1}{2}\epsilon_{ijk} C_{jk}
 
     where :math:`\epsilon_{ijk}` is the Levi-Civita symbol.
+
+    Parameters
+    ----------
+    tensor : Matrix (3, 3)
+        Second order tensor.
+
+    Returns
+    -------
+    dual: Matrix (3)
+        Axial vector that is the dual of tensor.
 
     References
     ----------
@@ -313,7 +378,15 @@ def grad_vec(A, coords=(x, y, z), h_vec=(1, 1, 1)):
         Matrix with the components of the gradient. The position (i, j)
         has as components diff(A[i], coords[j].
     """
-    return Matrix(3, 3, lambda i, j: (S(1)/h_vec[j])*A[i].diff(coords[j]))
+    gradient = zeros(3, 3)
+    for i in range(3):
+        vec_i = eye(3)[:, i]
+        for j in range(3):
+            vec_j = eye(3)[:, j]
+            diff_vec = unit_vec_deriv(j, i, coords, h_vec)
+            gradient += vec_i * vec_j.T * A[j].diff(coords[i])/h_vec[i]
+            gradient += vec_i * diff_vec.T * A[j]/h_vec[i]
+    return gradient
 
 
 def sym_grad(A, coords=(x, y, z), h_vec=(1, 1, 1)):
