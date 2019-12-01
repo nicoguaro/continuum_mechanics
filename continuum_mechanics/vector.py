@@ -447,7 +447,7 @@ def div(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     Parameters
     ----------
     A : Matrix, list
-        Scalar function to compute the divergence from.
+        Vector function to compute the divergence from.
     coords : Tuple (3), optional
         Coordinates for the new reference system. This is an optional
         parameter it takes (x, y, z) as default.
@@ -464,6 +464,47 @@ def div(A, coords=(x, y, z), h_vec=(1, 1, 1)):
     aux = simplify((S(1)/h)*sum(diff(A[k]*h/h_vec[k], coords[k])
                                 for k in range(3)))
     return aux
+
+def div_tensor(tensor, coords=(x, y, z), h_vec=(1, 1, 1)):
+    """
+    Divergence of a (second order) tensor
+
+    Parameters
+    ----------
+    tensor : Matrix (3, 3)
+        Tensor function function to compute the divergence from.
+    coords : Tuple (3), optional
+        Coordinates for the new reference system. This is an optional
+        parameter it takes (x, y, z) as default.
+    h_vec : Tuple (3), optional
+        Scale coefficients for the new coordinate system. It takes
+        (1, 1, 1), as default.
+
+    Returns
+    -------
+    divergence: Matrix
+        Divergence of tensor.
+
+    References
+    ----------
+    .. [RICHARDS] Rowland Richards. Principles of Solids Mechanics.
+        CRC Press, 2011.
+    """
+    h1, h2, h3 = h_vec
+    u1, u2, u3 = coords
+    div1 = diff(h2*h3*tensor[0, 0], u1) + diff(h1*h3*tensor[0, 1], u2) \
+         + diff(h1*h2*tensor[0, 2], u3) + h3*tensor[0, 1]*diff(h1, u2) \
+         + h2*tensor[0, 2]*diff(h1, u3) - h3*tensor[1, 1]*diff(h2, u1) \
+         - h2*tensor[2, 2]*diff(h3, u1)
+    div2 = diff(h2*h3*tensor[1, 0], u1) + diff(h1*h3*tensor[1, 1], u2) \
+         + diff(h1*h2*tensor[1, 2], u3) + h1*tensor[1, 2]*diff(h2, u3) \
+         + h3*tensor[1, 0]*diff(h2, u1) - h1*tensor[2, 2]*diff(h3, u2) \
+         - h3*tensor[2, 2]*diff(h1, u2)
+    div3 = diff(h2*h3*tensor[2, 0], u1) + diff(h1*h3*tensor[2, 1], u2) \
+         + diff(h1*h2*tensor[2, 2], u3) + h2*tensor[2, 0]*diff(h1, u1) \
+         + h1*tensor[2, 1]*diff(h1, u2) - h1*tensor[1, 1]*diff(h2, u3) \
+         + h2*tensor[2, 2]*diff(h1, u3)
+    return Matrix([div1, div2, div3])/(h1*h2*h3)
 
 
 def curl(A, coords=(x, y, z), h_vec=(1, 1, 1)):

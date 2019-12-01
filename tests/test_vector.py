@@ -9,7 +9,7 @@ from sympy import symbols, sin, cos, Abs
 from sympy import Matrix, simplify, Function, diff, zeros
 from continuum_mechanics.vector import (scale_coeff, levi_civita, dual_tensor,
                                         dual_vector, grad, grad_vec, div,
-                                        curl, lap, lap_vec)
+                                        div_tensor, curl, lap, lap_vec)
 
 x, y, z = sym.symbols("x y z")
 
@@ -90,9 +90,31 @@ def test_grad_vec():
 
 
 def test_div():
-    divergence = div([x**2 + y*z, y**2+x*z, z**2 + x*y])
+    divergence = div([x**2 + y*z, y**2 + x*z, z**2 + x*y])
     expected_divergence = 2*x + 2*y + 2*z
     assert divergence == expected_divergence
+
+
+def test_div_tensor():
+    
+    # Cylindrical coordinates for symmetric tensor
+    r, phi, z = symbols("r phi z")
+    A11, A22, A33 = symbols("A_11 A_22 A_33", cls=Function)
+    A12, A13, A23 = symbols("A_12 A_13 A_23", cls=Function)
+    A = Matrix([
+            [A11(r, phi, z), A12(r, phi, z), A13(r, phi, z)],
+            [A12(r, phi, z), A22(r, phi, z), A23(r, phi, z)],
+            [A13(r, phi, z), A23(r, phi, z), A33(r, phi, z)]])
+    divergence = div_tensor(A, (r, phi, z), (1, r, 1))
+    div1 = diff(A11(r, phi, z), r) + 1/r*diff(A12(r, phi, z), phi) \
+         + diff(A13(r, phi, z), z) + (A11(r, phi, z) - A22(r, phi, z))/r
+    div2 = diff(A12(r, phi, z), r) + 1/r*diff(A22(r, phi, z), phi) \
+         + diff(A23(r, phi, z), z) + 2*A12(r, phi, z)/r
+    div3 = diff(A13(r, phi, z), r) + 1/r*diff(A23(r, phi, z), phi) \
+         + diff(A33(r, phi, z), z) + A13(r, phi, z)/r
+    expected_div = Matrix([div1, div2, div3])
+    assert divergence.equals(expected_div)
+
 
 
 def test_curl():
