@@ -206,7 +206,7 @@ def unit_vec_deriv(vec_i, coord_j, coords=(x, y, z), h_vec=(1, 1, 1)):
     .. math::
 
         \frac{\partial{\hat{\mathbf{e}}_i}}{\partial u_j} =
-        \begin{cases} 
+        \begin{cases}
         \hat{\mathbf{e}_j} \frac{1}{h_i} \frac{\partial{h_j}}{\partial u_i}
           &\text{if } i\neq j\\
         -\sum_{\substack{k=1\\ k\neq i}}^3 \hat{\mathbf{e}_k} \frac{1}{h_k}
@@ -324,13 +324,12 @@ def dual_vector(tensor):
     """
     if not tensor.is_anti_symmetric():
         raise TypeError("The tensor should be antisymmetric")
-    else:
-        dual = Matrix([0, 0, 0])
-        for i in range(3):
-            for j in range(3):
-                for k in range(3):
-                    dual[i] = dual[i] + levi_civita(i, j, k) * tensor[j, k]
-        return dual/S(2)
+    dual = Matrix([0, 0, 0])
+    for i in range(3):
+        for j in range(3):
+            for k in range(3):
+                dual[i] = dual[i] + levi_civita(i, j, k) * tensor[j, k]
+    return dual/S(2)
 
 
 #%% Differential operators

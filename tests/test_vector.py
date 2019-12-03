@@ -6,7 +6,7 @@ Test for vector at continuum_mechanics package
 from __future__ import division, print_function
 import sympy as sym
 from sympy import symbols, sin, cos, Abs
-from sympy import Matrix, simplify, Function, diff, zeros
+from sympy import Matrix, Function, diff
 from continuum_mechanics.vector import (scale_coeff, levi_civita, dual_tensor,
                                         dual_vector, grad, grad_vec, div,
                                         div_tensor, curl, lap, lap_vec)
@@ -35,18 +35,18 @@ def test_levi_civita():
 def test_dual_tensor():
     vector = Matrix([1, 2, 3])
     tensor = Matrix([
-            [ 0,  3, -2],
-            [-3,  0,  1],
-            [ 2, -1,  0]])
+        [0, 3, -2],
+        [-3, 0, 1],
+        [2, -1, 0]])
     assert dual_tensor(vector) == tensor
     assert dual_vector(tensor) == vector
 
 
 def test_dual_vector():
     tensor = Matrix([
-            [ 0,  3, -2],
-            [-3,  0,  1],
-            [ 2, -1,  0]])
+        [0, 3, -2],
+        [-3, 0, 1],
+        [2, -1, 0]])
     vector = Matrix([1, 2, 3])
     assert dual_vector(tensor) == vector
     assert dual_tensor(vector) == tensor
@@ -78,7 +78,7 @@ def test_grad_vec():
     A2 = Ap(r, phi, theta)
     A3 = At(r, phi, theta)
     A = Matrix([A1, A2, A3])
-    gradient = grad_vec(A, (r,phi,theta), (1, r, r*sin(phi)))
+    gradient = grad_vec(A, (r, phi, theta), (1, r, r*sin(phi)))
     expected_gradient = Matrix([
         [diff(A1, r), diff(A2, r), diff(A3, r)],
         [(diff(A1, phi) - A2)/r, (A1 + diff(A2, phi))/r,
@@ -96,15 +96,15 @@ def test_div():
 
 
 def test_div_tensor():
-    
+
     # Cylindrical coordinates for symmetric tensor
-    r, phi, z = symbols("r phi z")
+    r, phi = symbols("r phi")
     A11, A22, A33 = symbols("A_11 A_22 A_33", cls=Function)
     A12, A13, A23 = symbols("A_12 A_13 A_23", cls=Function)
     A = Matrix([
-            [A11(r, phi, z), A12(r, phi, z), A13(r, phi, z)],
-            [A12(r, phi, z), A22(r, phi, z), A23(r, phi, z)],
-            [A13(r, phi, z), A23(r, phi, z), A33(r, phi, z)]])
+        [A11(r, phi, z), A12(r, phi, z), A13(r, phi, z)],
+        [A12(r, phi, z), A22(r, phi, z), A23(r, phi, z)],
+        [A13(r, phi, z), A23(r, phi, z), A33(r, phi, z)]])
     divergence = div_tensor(A, (r, phi, z), (1, r, 1))
     div1 = diff(A11(r, phi, z), r) + 1/r*diff(A12(r, phi, z), phi) \
          + diff(A13(r, phi, z), z) + (A11(r, phi, z) - A22(r, phi, z))/r
