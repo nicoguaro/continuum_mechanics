@@ -1,7 +1,7 @@
 language: python
 python:
+- 3.7
 - 3.6
-- 3.5
 install: pip install -U tox-travis
 script: tox
 deploy:
@@ -13,4 +13,4 @@ deploy:
   on:
     tags: true
     repo: nicoguaro/continuum_mechanics
-    python: 3.6
+    python: 3.7
