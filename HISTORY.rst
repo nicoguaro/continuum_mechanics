@@ -12,3 +12,12 @@ History
 
 * Add elasticity operators.
 
+
+0.2.0 (2019-12-02)
+------------------
+
+* Python 2 support dropped.
+
+* Fix vector gradient for curvilinear coordinates.
+
+* Add divergence for second-order tensors.
