@@ -48,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Continuum Mechanics'
-copyright = u"2019, Nicolás Guarín-Zapata"
+copyright = u"2020, Nicolás Guarín-Zapata"
 author = u"Nicolás Guarín-Zapata"
 
 # The version info for the project you're documenting, acts as replacement
