@@ -90,7 +90,7 @@ and returns a scalar.
 
     3
 
-.. code:: ipython3
+.. code:: python
 
     vector.div(Matrix([
         x**2 + y*z,
@@ -131,7 +131,7 @@ vector.
     A_{zx}(x,y,z) & A_{zy}(x,y,z) & A_{zz}(x,y,z)
     \end{bmatrix}
 
-.. code:: ipython3
+.. code:: python
 
     vector.div_tensor(tensor)
 
@@ -167,7 +167,7 @@ Let us check the identity
 Visualization of tensors
 ------------------------
 
-.. code:: ipython3
+.. code:: python
 
     from sympy import Matrix
     from continuum_mechanics.visualization import mohr2d, mohr3d, traction_circle
