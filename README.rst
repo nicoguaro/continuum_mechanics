@@ -4,26 +4,28 @@ Continuum Mechanics
 
 
 .. image:: https://img.shields.io/pypi/v/continuum_mechanics.svg
-        :target: https://pypi.python.org/pypi/continuum_mechanics
+    :target: https://pypi.python.org/pypi/continuum_mechanics
 
 .. image:: https://img.shields.io/travis/nicoguaro/continuum_mechanics.svg
-        :target: https://travis-ci.org/nicoguaro/continuum_mechanics
+    :target: https://travis-ci.org/nicoguaro/continuum_mechanics
 
 .. image:: https://readthedocs.org/projects/continuum-mechanics/badge/?version=latest
-        :target: https://continuum-mechanics.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
+    :target: https://continuum-mechanics.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/nicoguaro/continuum_mechanics/shield.svg
-     :target: https://pyup.io/repos/github/nicoguaro/continuum_mechanics/
-     :alt: Updates
+    :target: https://pyup.io/repos/github/nicoguaro/continuum_mechanics/
+    :alt: Updates
+
+.. image:: https://mybinder.org/badge_logo.svg
+    :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master
 
 
 
 Utilities for doing calculations in continuum mechanics.
 
 
-* Free software: `MIT license <https://opensource.org/licenses/MIT>`__
+* Free software: `MIT license <https://opensource.org/licenses/MIT>`__.
 * Documentation: https://continuum-mechanics.readthedocs.io.
 
 
