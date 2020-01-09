@@ -32,16 +32,16 @@ Vector operators in Cartesian coordinates
 
 All these operators are in the module ``vector``.
 
-.. code:: ipython3
+.. code:: python
 
     from sympy import *
     from continuum_mechanics import vector
 
-By default Cartesian coordinates are given by :math:`x`, :math:`y` and
+By default, Cartesian coordinates are given by :math:`x`, :math:`y` and
 :math:`z`. If these coordinates are used there is not necessary to
 specify them when calling the vector operators
 
-.. code:: ipython3
+.. code:: python
 
     init_printing()
     x, y, z = symbols("x y z")
@@ -55,7 +55,7 @@ Gradient of a scalar function
 The gradient takes as input a scalar and returns a vector, represented
 by a 3 by 1 matrix.
 
-.. code:: ipython3
+.. code:: python
 
     f = 2*x + 3*y**2 - sin(z)
     f
@@ -64,7 +64,7 @@ by a 3 by 1 matrix.
 
     2 x + 3 y^{2} - \sin{\left (z \right )}
 
-.. code:: ipython3
+.. code:: python
 
     vector.grad(f)
 
@@ -81,7 +81,7 @@ Divergence of a vector function
 The divergence takes as input a vector (represented by a 3 by 1 matrix)
 and returns a scalar.
 
-.. code:: ipython3
+.. code:: python
 
     vector.div(Matrix([x, y, z]))
 
@@ -109,13 +109,13 @@ Divergence of a tensor function
 The divergence of a tensor (represented by a 3 by 3 matrix) returns a
 vector.
 
-.. code:: ipython3
+.. code:: python
 
     Axx, Axy, Axz = symbols("A_xx A_xy A_xz", cls=Function)
     Ayx, Ayy, Ayz = symbols("A_yx A_yy A_yz", cls=Function)
     Azx, Azy, Azz = symbols("A_zx A_zy A_zz", cls=Function)
 
-.. code:: ipython3
+.. code:: python
 
     tensor = Matrix([
         [Axx(x, y, z), Axy(x, y, z), Axz(x, y, z)],
@@ -148,12 +148,14 @@ vector.
 Curl of a vector function
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code:: ipython3
+Let us check the identity
+
+.. math:: \nabla \times \nabla f(x, y, z) = 0\, .
+
+
+.. code:: python
 
     fun = symbols("fun", cls=Function)
-
-.. code:: ipython3
-
     vector.curl(vector.grad(fun(x, y, z)))
 
 
@@ -183,7 +185,7 @@ First, let us visualize the tensor
    0 &-1
    \end{bmatrix}\, .
 
-.. code:: ipython3
+.. code:: python
 
     mohr2d(Matrix([
       [1,0],
@@ -195,9 +197,10 @@ First, let us visualize the tensor
 
 From the Mohr circle, we can see that the principal directions are given
 at :math:`0` and :math:`\pi/2` radians. This can be more easily
-visualized using the traction circle.
+visualized using the traction circle, where normal vectors are presented
+in light gray and the traction vectors are presented in colors.
 
-.. code:: ipython3
+.. code:: python
 
     traction_circle(Matrix([
       [1,0],
@@ -216,7 +219,7 @@ Now, let us visualize
    3 &-5
    \end{bmatrix}\, .
 
-.. code:: ipython3
+.. code:: python
 
     mohr2d(Matrix([
       [1, 3],
@@ -227,7 +230,7 @@ Now, let us visualize
   :align: center
 
 
-.. code:: ipython3
+.. code:: python
 
     traction_circle(Matrix([
       [1, 3],
@@ -251,7 +254,7 @@ Let us visualize the tensor
    4 &1 &3
    \end{bmatrix}\, .
 
-.. code:: ipython3
+.. code:: python
 
     mohr3d(Matrix([
         [1, 2, 4],
@@ -272,7 +275,7 @@ Now, let us visualize the tensor
    0 &0 &3
    \end{bmatrix}\, .
 
-.. code:: ipython3
+.. code:: python
 
     mohr3d(Matrix([
         [1, 0, 0],
