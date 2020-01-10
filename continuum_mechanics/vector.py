@@ -14,7 +14,7 @@ x, y, z = symbols("x y z")
 #%% Curvilinear coordinates
 def transform_coords(coord_sys, coords, a=1, b=1, c=1):
     """
-    Return scale factors for predefined coordinate system.
+    Return transformation for predefined coordinate systems.
 
     Parameters
     -------

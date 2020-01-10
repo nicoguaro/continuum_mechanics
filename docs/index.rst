@@ -8,6 +8,7 @@ Welcome to Continuum Mechanics's documentation!
    readme
    installation
    usage
+   tutorials
    modules
    contributing
    authors
