@@ -67,7 +67,7 @@ Hence, we have the following
 Curvilinear coordinates available
 ---------------------------------
 
-Continuum Mechanics has the following coordinate systems available:
+The following coordinate systems are available:
 
 -  Cartesian;
 
