@@ -1,9 +1,6 @@
-=======================================
+======================================
 Introduction to orthogonal coordinates
-=======================================
-
-.. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fcurvilinear_coordinates.ipynb
+======================================
 
 In :math:`\mathbb{R}^3`, we can think that each point is given by the
 intersection of three surfaces. Thus, we have three families of curved
@@ -112,7 +109,9 @@ First, we define the variables for the coordinates :math:`(u, v, w)`.
     sym.init_printing()
     u, v, w = sym.symbols("u v w")
 
-And, let’s compute the coordinates for the **parabolic** system.
+And, we compute the coordinates for the **parabolic** system using
+``transform_coords``. The first parameter is a string defining the
+coordinate system and the second is a tuple with the coordinates.
 
 .. code:: python
 
@@ -123,11 +122,12 @@ And, let’s compute the coordinates for the **parabolic** system.
 
 .. math::
 
-    \left ( u v \cos{\left (w \right )}, \quad u v \sin{\left (w \right )}, \quad \frac{u^{2}}{2} - \frac{v^{2}}{2}\right )
+    \displaystyle \left( u v \cos{\left(w \right)}, \  u v \sin{\left(w \right)}, \  \frac{u^{2}}{2} - \frac{v^{2}}{2}\right)
 
 
 
-Let us ask for scale factors for bipolar cylindrical coordinates. The
+The scale factors for the coordinate systems mentioned above are
+availabe. We can compute them for bipolar cylindrical coordinates. The
 coordinates are defined by
 
 .. math::
@@ -138,7 +138,7 @@ coordinates are defined by
    &z = z\, ,
    \end{align}
 
-that has the following scale factors
+and have the following scale factors
 
 .. math:: h_\sigma = h_\tau = \frac{a}{\cosh\tau - \cos\sigma}\, ,
 
@@ -148,12 +148,21 @@ and :math:`h_z = 1`.
 
     sigma, tau, z, a = sym.symbols("sigma tau z a")
     z = sym.symbols("z")
-    scale = vector.scale_coeff_coords("bipolar_cylindrical", (sigma, tau, z), a)
+    scale = vector.scale_coeff_coords("bipolar_cylindrical", (sigma, tau, z), a=a)
+    scale
+
+
+
+
+.. math::
+
+    \displaystyle \left( \frac{a}{- \cos{\left(\sigma \right)} + \cosh{\left(\tau \right)}}, \  \frac{a}{- \cos{\left(\sigma \right)} + \cosh{\left(\tau \right)}}, \  1\right)
+
+
 
 Finally, we can compute vector operators for different coordinates.
 
-Let’s try computing the Laplace operator for the bipolar cylindrical
-system given by
+The Laplace operator for the bipolar cylindrical system given by
 
 .. math::
 
@@ -164,7 +173,12 @@ system given by
    \frac{\partial^2 \phi}{\partial \sigma^2} +
    \frac{\partial^2 \phi}{\partial \tau^2}
    \right) +
-   \frac{\partial^2 \phi}{\partial z^2}\, .
+   \frac{\partial^2 \phi}{\partial z^2}\, ,
+
+and we can compute it using the function ``lap``. For this function, the
+first parameter is the expression that we want to compute the Laplacian
+for, the second parameter is a tuple with the coordinates and the third
+parameter is a tuple with the scale factors.
 
 .. code:: python
 
@@ -177,4 +191,4 @@ system given by
 
 .. math::
 
-    \frac{1}{a^{2}} \left(a^{2} \frac{\partial^{2}}{\partial z^{2}}  \phi{\left (\sigma,\tau,z \right )} + \left(\cos{\left (\sigma \right )} - \cosh{\left (\tau \right )}\right)^{2} \frac{\partial^{2}}{\partial \sigma^{2}}  \phi{\left (\sigma,\tau,z \right )} + \left(\cos{\left (\sigma \right )} - \cosh{\left (\tau \right )}\right)^{2} \frac{\partial^{2}}{\partial \tau^{2}}  \phi{\left (\sigma,\tau,z \right )}\right)
+    \displaystyle \frac{a^{2} \frac{\partial^{2}}{\partial z^{2}} \phi{\left(\sigma,\tau,z \right)} + \left(\cos{\left(\sigma \right)} - \cosh{\left(\tau \right)}\right)^{2} \frac{\partial^{2}}{\partial \sigma^{2}} \phi{\left(\sigma,\tau,z \right)} + \left(\cos{\left(\sigma \right)} - \cosh{\left(\tau \right)}\right)^{2} \frac{\partial^{2}}{\partial \tau^{2}} \phi{\left(\sigma,\tau,z \right)}}{a^{2}}
