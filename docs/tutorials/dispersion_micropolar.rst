@@ -85,8 +85,8 @@ following equations, after some manipulations
 where we can see that the equations for the scalar potentials are
 uncoupled, while the ones for the vector potentials are coupled.
 
-Writing the vector potentials as plane waves of amplitude $
-:math:`\mathbf{A}`$ and $ :math:`\mathbf{B}`$, wave number
+Writing the vector potentials as plane waves of amplitude
+:math:`\mathbf{A}` and :math:`\mathbf{B}`, wave number
 :math:`\kappa` and circular frequency :math:`\omega` that propagate
 along the (x) axis,
 
