@@ -95,7 +95,7 @@ The following coordinate systems are available:
 -  Conical.
 
 To obtain the transformation for a given coordinate system we can use
-the function ``transform_coords`` in the ``vector`` module.
+the function :py:func:`vector.transform_coords`.
 
 .. code:: python
 
@@ -110,8 +110,9 @@ First, we define the variables for the coordinates :math:`(u, v, w)`.
     u, v, w = sym.symbols("u v w")
 
 And, we compute the coordinates for the **parabolic** system using
-``transform_coords``. The first parameter is a string defining the
-coordinate system and the second is a tuple with the coordinates.
+:py:func:`vector.transform_coords`. The first parameter is a string
+defining the coordinate system and the second is a tuple with the
+coordinates.
 
 .. code:: python
 
@@ -175,7 +176,7 @@ The Laplace operator for the bipolar cylindrical system given by
    \right) +
    \frac{\partial^2 \phi}{\partial z^2}\, ,
 
-and we can compute it using the function ``lap``. For this function, the
+and we can compute it using the function :py:func:`vector.lap`. For this function, the
 first parameter is the expression that we want to compute the Laplacian
 for, the second parameter is a tuple with the coordinates and the third
 parameter is a tuple with the scale factors.

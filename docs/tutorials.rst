@@ -14,3 +14,4 @@ vector operators.
    :caption: Contents:
 
    tutorials/curvilinear_coordinates
+   tutorials/dispersion_micropolar
