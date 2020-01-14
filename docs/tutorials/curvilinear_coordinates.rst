@@ -166,7 +166,7 @@ and :math:`h_z = 1`.
 
 Finally, we can compute vector operators for different coordinates.
 
-The Laplace operator for the bipolar cylindrical system given by
+The Laplace operator for the bipolar cylindrical system is given by
 
 .. math::
 

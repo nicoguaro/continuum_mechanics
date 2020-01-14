@@ -5,8 +5,17 @@ Point source on top of a halfspace
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fpoint_source_halfspace.ipynb
 
-We are going to play with the solutions for a concentrated force located
-at :math:`(0,0,0)`. Positive :math:`z` is inside the medium.
+ To illustrate the use of the package we are going to play with the
+ solutions for a concentrated force located on top of a halfspace. The
+ origin, :math:`\mathbf{x} = (0,0,0)`, is placed on the free surface and
+ positive :math:`z` is inside the medium. This problem is of interest
+ when modeling the deformation/stress around a localized load, e.g., the
+ load caused by the weigth of a building on top of a soil.
+
+ The derivations for the strain and stress tensors are not too difficult,
+ but it can get cumbersome really fast because of the lengthy
+ calculations. Using the package we can simplify the whole process.
+
 
 .. code:: python
 
@@ -17,9 +26,10 @@ at :math:`(0,0,0)`. Positive :math:`z` is inside the medium.
 
 .. code:: python
 
-    %matplotlib notebook
     import matplotlib.pyplot as plt
     from matplotlib import colors
+
+The following snippet allows to format the graphs.
 
 .. code:: python
 
@@ -29,7 +39,21 @@ at :math:`(0,0,0)`. Positive :math:`z` is inside the medium.
 
 .. code:: python
 
-    x, y, z, r, E, nu, Fx, Fy, Fz = symbols('x y z r E nu Fx Fy Fz')
+    x, y, z, r, E, nu, Fx, Fy, Fz = symbols('x y z r E nu F_x F_y F_z')
+
+    The components of the displacement vector are given by [LANDAU]_
+
+.. math::
+
+  \begin{align}
+  &u_x = \frac{(1 + \nu)}{2 \pi E}  \left\{\left[\frac{xz}{r^3} - \frac{(1 - 2\nu)x}{r(r + z)}\right]F_z +
+    \frac{2(1 - \nu)r +z}{r(r + z)}F_x  +\frac{[2r(\nu r + z) + z^2]x}{r^3(r + z)^2}(xF_x + y F_y)\right\}\, ,\\
+  &u_y = \frac{(1 + \nu)}{2 \pi E}  \left\{\left[\frac{yz}{r^3} - \frac{(1 - 2\nu)y}{r(r + z)}\right]F_z +
+    \frac{2(1 - \nu)r +z}{r(r + z)}F_y  +\frac{[2r(\nu r + z) + z^2]y}{r^3(r + z)^2}(xF_x + y F_y)\right\}\, ,\\
+  &u_z = \frac{(1 + \nu)}{2 \pi E}  \left\{\left[\frac{2(1 - \nu)}{r} - \frac{z^2}{r^3}\right]F_z  +\left[\frac{1 - 2\nu}{r(r + z)} + \frac{z}{r^3}\right](xF_x +  y F_y)\right\}\, ,
+  \end{align}
+
+with :math:`r = \sqrt{x^2 + y^2 + z^2}`.
 
 .. code:: python
 
@@ -39,11 +63,9 @@ at :math:`(0,0,0)`. Positive :math:`z` is inside the medium.
     ux
 
 
-
 .. math::
 
-    \frac{1}{2 \pi E} \left(\nu + 1\right) \left(\frac{Fx}{r \left(r + z\right)} \left(r \left(- 2 \nu + 2\right) + z\right) + Fz \left(- \frac{x \left(- 2 \nu + 1\right)}{r \left(r + z\right)} + \frac{x z}{r^{3}}\right) + \frac{x}{r^{3} \left(r + z\right)^{2}} \left(Fx x + Fy y\right) \left(2 r \left(\nu r + z\right) + z^{2}\right)\right)
-
+    \frac{1}{2 \pi E} \left(\nu + 1\right) \left(\frac{F_{x}}{r \left(r + z\right)} \left(r \left(- 2 \nu + 2\right) + z\right) + F_{z} \left(- \frac{x \left(- 2 \nu + 1\right)}{r \left(r + z\right)} + \frac{x z}{r^{3}}\right) + \frac{x}{r^{3} \left(r + z\right)^{2}} \left(F_{x} x + F_{y} y\right) \left(2 r \left(\nu r + z\right) + z^{2}\right)\right)
 
 
 .. code:: python
@@ -54,12 +76,9 @@ at :math:`(0,0,0)`. Positive :math:`z` is inside the medium.
     uy
 
 
-
-
 .. math::
 
-    \frac{1}{2 \pi E} \left(\nu + 1\right) \left(\frac{Fy}{r \left(r + z\right)} \left(r \left(- 2 \nu + 2\right) + z\right) + Fz \left(- \frac{y \left(- 2 \nu + 1\right)}{r \left(r + z\right)} + \frac{y z}{r^{3}}\right) + \frac{y}{r^{3} \left(r + z\right)^{2}} \left(Fx x + Fy y\right) \left(2 r \left(\nu r + z\right) + z^{2}\right)\right)
-
+    \frac{1}{2 \pi E} \left(\nu + 1\right) \left(\frac{F_{y}}{r \left(r + z\right)} \left(r \left(- 2 \nu + 2\right) + z\right) + F_{z} \left(- \frac{y \left(- 2 \nu + 1\right)}{r \left(r + z\right)} + \frac{y z}{r^{3}}\right) + \frac{y}{r^{3} \left(r + z\right)^{2}} \left(F_{x} x + F_{y} y\right) \left(2 r \left(\nu r + z\right) + z^{2}\right)\right)
 
 
 .. code:: python
@@ -69,11 +88,10 @@ at :math:`(0,0,0)`. Positive :math:`z` is inside the medium.
     uz
 
 
-
-
 .. math::
 
-    \frac{1}{2 \pi E} \left(\nu + 1\right) \left(Fz \left(\frac{1}{r} \left(- 2 \nu + 2\right) + \frac{z^{2}}{r^{3}}\right) + \left(Fx x + Fy y\right) \left(\frac{- 2 \nu + 1}{r \left(r + z\right)} + \frac{z}{r^{3}}\right)\right)
+    \frac{1}{2 \pi E} \left(\nu + 1\right) \left(F_{z} \left(\frac{1}{r} \left(- 2 \nu + 2\right) + \frac{z^{2}}{r^{3}}\right) + \left(F_{x} x + F_{y} y\right) \left(\frac{- 2 \nu + 1}{r \left(r + z\right)} + \frac{z}{r^{3}}\right)\right)
+
 
 
 
@@ -177,7 +195,7 @@ a vertical load and a Poisson coefficient :math:`\nu = 1/4`.
 
 .. math::
 
-    \left[\begin{matrix}- \frac{Fz \left(73 \sqrt{2} + 108\right)}{48 \pi \left(7 + 5 \sqrt{2}\right)} & - \frac{5 Fz \left(2 \sqrt{2} + 3\right)}{24 \pi \left(7 + 5 \sqrt{2}\right)} & - \frac{5 Fz \left(4 + 3 \sqrt{2}\right)}{16 \pi \left(2 \sqrt{2} + 3\right)}\\- \frac{5 Fz \left(2 \sqrt{2} + 3\right)}{24 \pi \left(7 + 5 \sqrt{2}\right)} & - \frac{Fz \left(11 \sqrt{2} + 16\right)}{16 \pi \left(7 + 5 \sqrt{2}\right)} & 0\\- \frac{5 Fz \left(4 + 3 \sqrt{2}\right)}{16 \pi \left(2 \sqrt{2} + 3\right)} & 0 & - \frac{Fz \left(103 \sqrt{2} + 148\right)}{48 \pi \left(7 + 5 \sqrt{2}\right)}\end{matrix}\right]
+    \left[\begin{matrix}- \frac{F_{z} \left(73 \sqrt{2} + 108\right)}{48 \pi \left(7 + 5 \sqrt{2}\right)} & - \frac{5 F_{z} \left(2 \sqrt{2} + 3\right)}{24 \pi \left(7 + 5 \sqrt{2}\right)} & - \frac{5 F_{z} \left(4 + 3 \sqrt{2}\right)}{16 \pi \left(2 \sqrt{2} + 3\right)}\\- \frac{5 F_{z} \left(2 \sqrt{2} + 3\right)}{24 \pi \left(7 + 5 \sqrt{2}\right)} & - \frac{F_{z} \left(11 \sqrt{2} + 16\right)}{16 \pi \left(7 + 5 \sqrt{2}\right)} & 0\\- \frac{5 F_{z} \left(4 + 3 \sqrt{2}\right)}{16 \pi \left(2 \sqrt{2} + 3\right)} & 0 & - \frac{F_{z} \left(103 \sqrt{2} + 148\right)}{48 \pi \left(7 + 5 \sqrt{2}\right)}\end{matrix}\right]
 
 
 
@@ -197,7 +215,7 @@ in this case.
     x_vec, z_vec = np.mgrid[-2:2:100j, 0:5:100j]
 
 We can use
-`lampdify() <https://docs.sympy.org/1.5.1/modules/utilities/lambdify.html>`__
+`lambdify() <https://docs.sympy.org/1.5.1/modules/utilities/lambdify.html>`__
 to turn the SymPy expressions to evaluatable functions.
 
 .. code:: python
@@ -449,3 +467,11 @@ We can also plot the invariants of the stress tensor
 
     Minimum value in the domain: 0.0274784
     Maximum value in the domain: 958.065
+
+
+References
+----------
+
+.. [LANDAU]
+    Landau, L. D., Kosevich, A. M., Pitaevskii, L. P., & Lifshitz, E. M.
+       (1986). Theory of elasticity.
