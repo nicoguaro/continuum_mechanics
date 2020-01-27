@@ -19,8 +19,8 @@ bibliography: paper.bib
 
 # Summary
 
-This is a Python package built on top of SymPy (@sympy) to aid
-with calculations in **Continuum Mechanics** that are commonly lengthy and
+`continuum_mechanics` is a Python package built on top of SymPy (@sympy) to aid
+with calculations in Continuum Mechanics that are commonly lengthy and
 tedious. It also provides visualization capabilities for second-order tensors
 such as Mohr's circle to help in stress analyses.
 
@@ -33,7 +33,7 @@ The package can be used by:
   the Method of Manufactured Solutions (@roache2001, @aycock2020);
 
 - analysts that need to _calibrate_ computational models related
-  structural analysis in Civil or Mechanical Engineering.
+  structural analysis in Civil or Mechanical Engineering;
 
 - teachers who want to automate the creation of problem sets with
   solutions;
@@ -45,7 +45,7 @@ or can be tested online using the provided [Jupyter Notebooks](https://mybinder.
 
 # Statement of Need
 
-**continuum_mechanics** was designed to be used by researchers and instructors
+`continuum_mechanics` was designed to be used by researchers and instructors
 in the field of Continuum Mechanics. The package helps with tedious calculations
 such as vector identities or the application of differential operators to
 scalar, vector or tensor fields.
@@ -111,18 +111,13 @@ Some features of ``continuum_mechanics`` are:
 
 ## Gradient of a scalar function
 
-
-
-```python
-from sympy import *
-from continuum_mechanics import vector
-```
-
 By default Cartesian coordinates are given by $x$, $y$ and $z$.
 If these coordinates are used there is not necessary to specify
 them when calling the vector operators
 
 ```python
+from sympy import *
+from continuum_mechanics import vector
 x, y, z = symbols("x y z")
 ```
 
@@ -170,13 +165,15 @@ mohr3d(Matrix([
     [4, 1, 3]]))
 ```
 
+The Mohr circle for this tensor is presented in Figure 1.
+
 ![Mohr circle for a 3D symmetric tensor.](mohr3d.png)
 
 
 # Recent Uses
 
 The ``continuum_mechanics`` package was developed as a research aid in the
-Applied Mechanics group at Unicersidad EAFIT, Colombia. Particularly, it has
+Applied Mechanics group at Universidad EAFIT, Colombia. Particularly, it has
 been helpful during the development of Finite Element Methods for generalized
 continua (@nowacki1986, @hadjesfandiari2011).  Some of the calculations
 related to @guarin2020 are presented in one of the tutorials available
