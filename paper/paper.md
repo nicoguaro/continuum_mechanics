@@ -173,7 +173,7 @@ The Mohr circle for this tensor is presented in Figure 1.
 The ``continuum_mechanics`` package was developed as a research aid in the
 Applied Mechanics group at Universidad EAFIT, Colombia. Particularly, it has
 been helpful during the development of Finite Element Methods for generalized
-continua (@nowacki1986, @hadjesfandiari2011).  Some of the calculations
+continua (@nowacki1972, @hadjesfandiari2011).  Some of the calculations
 related to @guarin2020 are presented in one of the tutorials available
 in the documentation.
 
