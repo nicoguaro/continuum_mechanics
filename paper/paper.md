@@ -1,5 +1,5 @@
 ---
-title: `continuum_mechanics`: A Python package for Continuum Mechanics
+title: "continuum_mechanics: A Python package for Continuum Mechanics"
 tags:
   - continuum mechanics
   - computational mechanics
