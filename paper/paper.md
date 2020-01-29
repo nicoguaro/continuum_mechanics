@@ -1,5 +1,5 @@
 ---
-title: 'continuum_mechanics'
+title: `continuum_mechanics`: A Python package for Continuum Mechanics
 tags:
   - continuum mechanics
   - computational mechanics
@@ -21,8 +21,8 @@ bibliography: paper.bib
 
 `continuum_mechanics` is a Python package built on top of SymPy (@sympy) to aid
 with calculations in Continuum Mechanics that are commonly lengthy and
-tedious. It also provides visualization capabilities for second-order tensors
-such as Mohr's circle to help in stress analyses.
+tedious if done by hand. It also provides visualization capabilities for
+second-order tensors such as Mohr's circle to help in stress analyses.
 
 The package can be used by:
 
@@ -41,7 +41,8 @@ The package can be used by:
 - students who want to verify their solutions to problem sets.
 
 The `continuum_mechanics` package is ready for installation using `pip`
-or can be tested online using the provided [Jupyter Notebooks](https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master).
+or can be tested online using the provided
+[Jupyter Notebooks](https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master).
 
 # Statement of Need
 
@@ -103,9 +104,6 @@ Some features of ``continuum_mechanics`` are:
   - Laplace operator of a vector function; and
 
   - Biharmonic operator of a scalar function.
-
-  All these operators are in the module `vector`.
-
 
 # Examples of use
 
