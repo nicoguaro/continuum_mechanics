@@ -21,6 +21,8 @@ Continuum Mechanics
     :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master
 
 
+.. image:: https://img.shields.io/pypi/dm/continuum_mechanics
+    :target: https://pypistats.org/packages/continuum-mechanics
 
 Utilities for doing calculations in continuum mechanics.
 
