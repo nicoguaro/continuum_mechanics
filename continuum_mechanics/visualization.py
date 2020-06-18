@@ -7,7 +7,6 @@ Functions to aid the visualization of mathematical
 entities such as second rank tensors.
 
 """
-from __future__ import division, print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.linalg import eigvalsh
@@ -35,6 +34,11 @@ def mohr2d(stress, ax=None):
         Stress tensor.
     ax : Matplotlib axes, optional
         Axes where the plot is going to be added.
+
+    References
+    ----------
+    .. [BRAN] Brannon, R. (2003). Mohr’s Circle and more circles.
+        Poslední revize, 29(10).
     
     """
     try:
@@ -42,28 +46,29 @@ def mohr2d(stress, ax=None):
         stress.shape = 2, 2
     except:
         TypeError("Stress should be represented as an array.")
-    S11 = stress[0, 0]
-    S12 = stress[0, 1]
-    S22 = stress[1, 1]
-    center = [(S11 + S22)/2.0, 0.0]
-    radius = np.sqrt((S11 - S22)**2/4.0 + S12**2)
+    skew = (stress - stress.T)/2
+    sym = (stress + stress.T)/2
+    S11, S12, S21, S22 = stress.flatten()
+    mean = sym.trace()/2
+    center = [mean, skew[1, 0]]
+    radius = np.sqrt((sym[0, 0] - sym[1, 1])**2/4 + sym[0, 1]**2)
     Smin = center[0] - radius
     Smax = center[0] + radius
     
     if ax is None:
         plt.figure()
         ax = plt.gca() 
-    circ = plt.Circle((center[0],0), radius, facecolor='#cce885', lw=3,
+    circ = plt.Circle(center, radius, facecolor='#cce885', lw=3,
     edgecolor='#5c8037') 
     plt.axis('image')    
     ax.add_artist(circ)
     ax.set_xlim(Smin - .1*radius, Smax + .1*radius)
-    ax.set_ylim(-1.1*radius, 1.1*radius)
-    plt.plot([S22, S11], [S12, -S12], 'ko')
-    plt.plot([S22, S11], [S12, -S12], 'k')
+    ax.set_ylim(center[1] - 1.1*radius, center[1] + 1.1*radius)
+    plt.plot([S22, S11], [S21, -S12], 'ko')
+    plt.plot([S22, S11], [S21, -S12], 'k')
     plt.plot(center[0], center[1], 'o', mfc='w')
-    plt.text(S22 + 0.1*radius, S12, 'A')
-    plt.text(S11 + 0.1*radius, -S12, 'B')
+    plt.text(S22 + 0.1*radius, S21, 'A')
+    plt.text(S11 - 0.1*radius, -S12, 'B', ha="left")
     plt.xlabel(r"$\sigma$", size=fontsize + 2)
     plt.ylabel(r"$\tau$", size=fontsize + 2)
 
