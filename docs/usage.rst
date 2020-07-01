@@ -247,6 +247,37 @@ Now, let us visualize
   :align: center
 
 
+Now, let us try it with an asymmetric tensor
+
+.. math::
+
+    \begin{bmatrix}
+    1 &2\\
+    0 &3
+    \end{bmatrix}\, .
+
+.. code:: python
+
+    mohr2d(Matrix([
+      [1, 2],
+      [0, 3]]))
+
+.. image:: img/mohr2d_3.png
+  :width: 600px
+  :align: center
+
+
+.. code:: python
+
+    traction_circle(Matrix([
+      [1, 2],
+      [0, 3]]))
+
+.. image:: img/trac2d_3.png
+  :width: 600px
+  :align: center
+
+
 Mohr Circle in 3D
 ~~~~~~~~~~~~~~~~~~~
 

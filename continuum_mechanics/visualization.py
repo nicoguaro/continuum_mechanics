@@ -68,9 +68,10 @@ def mohr2d(stress, ax=None):
     plt.plot([S22, S11], [S21, -S12], 'k')
     plt.plot(center[0], center[1], 'o', mfc='w')
     plt.text(S22 + 0.1*radius, S21, 'A')
-    plt.text(S11 - 0.1*radius, -S12, 'B', ha="left")
+    plt.text(S11 + 0.1*radius, -S12, 'B')
     plt.xlabel(r"$\sigma$", size=fontsize + 2)
     plt.ylabel(r"$\tau$", size=fontsize + 2)
+    return ax
 
 
 def mohr3d(stress, ax=None):
@@ -117,6 +118,7 @@ def mohr3d(stress, ax=None):
     ax.set_ylim(-1.1*R_maj, 1.1*R_maj)
     plt.xlabel(r"$\sigma$", size=fontsize + 2)
     plt.ylabel(r"$\tau$", size=fontsize + 2)
+    return ax
 
 
 #%% Tensor visualizations
@@ -162,7 +164,7 @@ def traction_circle(stress, npts=48, ax=None):
     plt.ylabel(r"$y$", size=fontsize + 2)
     plt.xlim(-1.5, 1.5)
     plt.ylim(-1.5, 1.5)
-
+    return ax
 
 
 if __name__ == "__main__":
