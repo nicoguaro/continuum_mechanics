@@ -322,3 +322,71 @@ Now, let us visualize the tensor
 .. image:: img/mohr3d_2.png
   :width: 600px
   :align: center
+
+
+Elasticity tensor visualization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let us consider β-brass that is a cubic material and
+has the following material properties in Voigt notation:
+
+.. math::
+    C_{11} = 52\text{ GPa},\quad
+    C_{12} = 27.5\text{ GPa},\quad
+    C_{44} = 173\text{ GPa}.
+
+.. code:: python
+
+    C11 = 52e9
+    C12 = 27.5e9
+    C44 = 173e9
+    rho = 7600
+    C = np.zeros((6, 6))
+    C[0:3, 0:3] = np.array([[C11, C12, C12],
+                            [C12, C11, C12],
+                            [C12, C12, C11]])
+    C[3:6, 3:6] = np.diag([C44, C44, C44])
+
+One way to visualize a stiffness tensor is to use the
+Christofel equation
+
+.. math::
+
+    \det(\Gamma_{ij} - v_p^2\delta_{ij}) = 0\, ,
+
+where :math:`\Gamma_{ij}` is the Christofel stiffness and depends
+on the material properties (:math:`c_{ijkl}`) and unit vectors
+(:math`n_i`):
+
+.. math:
+
+    \Gamma_{ij} = c_{iklj}n_k n_l\, .
+
+This provides the eigenvalues that represent the phase
+speed for three propagation modes in the material.
+
+
+.. code:: python
+
+    V1, V2, V3, phi_vec, theta_vec = christofel_eig(C, 100, 100) 
+    V1 = np.sqrt(V1/rho)
+    V2 = np.sqrt(V2/rho)
+    V3 = np.sqrt(V3/rho)
+
+Phase speed for the first quasi-transverse mode.
+
+.. image:: img/qS1.png
+  :width: 600px
+  :align: center
+
+Phase speed for the second quasi-transverse mode.
+
+.. image:: img/qS2.png
+  :width: 600px
+  :align: center
+
+Phase speed for the quasi-longitudinal mode.
+
+.. image:: img/qP.png
+  :width: 600px
+  :align: center

@@ -9,6 +9,7 @@ entities such as second rank tensors.
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.linalg import eigvalsh
 from continuum_mechanics.tensor import christ_stiff
 
@@ -287,12 +288,12 @@ if __name__ == "__main__":
     
     # Phi is the azimut angle
     # theta is the cenital angle
-    V1, V2, V3, phi_vec, theta_vec = christofel_eig(C) 
+    V1, V2, V3, phi_vec, theta_vec = christofel_eig(C, 100, 100) 
     V1 = np.sqrt(V1*1e9/rho)
     V2 = np.sqrt(V2*1e9/rho)
     V3 = np.sqrt(V3*1e9/rho)
 
-    plot_surf(V1, phi_vec, theta_vec, title="qS1 speed")
-    plot_surf(V2, phi_vec, theta_vec, title="qS2 speed")
-    plot_surf(V3, phi_vec, theta_vec, title="qP speed")
+    plot_surf(V1, phi_vec, theta_vec)
+    plot_surf(V2, phi_vec, theta_vec)
+    plot_surf(V3, phi_vec, theta_vec)
     plt.show()
