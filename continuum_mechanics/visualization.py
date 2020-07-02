@@ -7,10 +7,11 @@ Functions to aid the visualization of mathematical
 entities such as second rank tensors.
 
 """
-from __future__ import division, print_function
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.linalg import eigvalsh
+from continuum_mechanics.tensor import christ_stiff
 
 # Plotting configuration
 gray = '#757575'
@@ -35,6 +36,11 @@ def mohr2d(stress, ax=None):
         Stress tensor.
     ax : Matplotlib axes, optional
         Axes where the plot is going to be added.
+
+    References
+    ----------
+    .. [BRAN] Brannon, R. (2003). Mohr’s Circle and more circles.
+        Poslední revize, 29(10).
     
     """
     try:
@@ -42,30 +48,32 @@ def mohr2d(stress, ax=None):
         stress.shape = 2, 2
     except:
         TypeError("Stress should be represented as an array.")
-    S11 = stress[0, 0]
-    S12 = stress[0, 1]
-    S22 = stress[1, 1]
-    center = [(S11 + S22)/2.0, 0.0]
-    radius = np.sqrt((S11 - S22)**2/4.0 + S12**2)
+    skew = (stress - stress.T)/2
+    sym = (stress + stress.T)/2
+    S11, S12, S21, S22 = stress.flatten()
+    mean = sym.trace()/2
+    center = [mean, skew[1, 0]]
+    radius = np.sqrt((sym[0, 0] - sym[1, 1])**2/4 + sym[0, 1]**2)
     Smin = center[0] - radius
     Smax = center[0] + radius
     
     if ax is None:
         plt.figure()
         ax = plt.gca() 
-    circ = plt.Circle((center[0],0), radius, facecolor='#cce885', lw=3,
+    circ = plt.Circle(center, radius, facecolor='#cce885', lw=3,
     edgecolor='#5c8037') 
     plt.axis('image')    
     ax.add_artist(circ)
     ax.set_xlim(Smin - .1*radius, Smax + .1*radius)
-    ax.set_ylim(-1.1*radius, 1.1*radius)
-    plt.plot([S22, S11], [S12, -S12], 'ko')
-    plt.plot([S22, S11], [S12, -S12], 'k')
+    ax.set_ylim(center[1] - 1.1*radius, center[1] + 1.1*radius)
+    plt.plot([S22, S11], [S21, -S12], 'ko')
+    plt.plot([S22, S11], [S21, -S12], 'k')
     plt.plot(center[0], center[1], 'o', mfc='w')
-    plt.text(S22 + 0.1*radius, S12, 'A')
+    plt.text(S22 + 0.1*radius, S21, 'A')
     plt.text(S11 + 0.1*radius, -S12, 'B')
     plt.xlabel(r"$\sigma$", size=fontsize + 2)
     plt.ylabel(r"$\tau$", size=fontsize + 2)
+    return ax
 
 
 def mohr3d(stress, ax=None):
@@ -112,6 +120,7 @@ def mohr3d(stress, ax=None):
     ax.set_ylim(-1.1*R_maj, 1.1*R_maj)
     plt.xlabel(r"$\sigma$", size=fontsize + 2)
     plt.ylabel(r"$\tau$", size=fontsize + 2)
+    return ax
 
 
 #%% Tensor visualizations
@@ -157,9 +166,134 @@ def traction_circle(stress, npts=48, ax=None):
     plt.ylabel(r"$y$", size=fontsize + 2)
     plt.xlim(-1.5, 1.5)
     plt.ylim(-1.5, 1.5)
+    return ax
 
+
+## Fourth order vis
+def christofel_eig(C, nphi=30, nth=30):
+    r"""Compute surfaces of eigenvalues for the Christoffel stiffness
+
+    For every direction
+
+    .. math::
+      \mathbf{n} =(\sin(\theta)\cos(\phi),\sin(\theta)\sin(\phi),\cos(\theta))
+
+    computes the eigenvalues of the Christoffel stiffness tensor. These
+    eigencalues are :math:`\rho v_p^2`, where :math:`\rho` is the mass
+    density and :math:`v_p` is the phase speed.
+
+    Parameters
+    ----------
+    C : (6,6) array
+        Stiffness tensor in Voigt notation.
+    nphi : (optional) int
+        Number of partitions in the azimut angle (phi).
+    nth : (optional) int
+        Number of partitions in the cenit angle (theta).
+
+    Returns
+    -------
+    V1, V2, V3 : (nphi, nth) arrays
+        Eigenvalues for the desired discretization.
+    phi_vec : (nphi) array
+        Array with azimut angles.
+    theta_vec : (nth) array
+        Array with cenit angles.
+
+    """
+    phi_vec, theta_vec = np.mgrid[0: 2*np.pi: nphi*1j, 0: np.pi: nth*1j]
+    V1 = 0*phi_vec
+    V2 = 0*phi_vec
+    V3 = 0*phi_vec
+
+    for i in range(nphi):
+        for j in range(nth):
+            phi = phi_vec[i, j]
+            theta = theta_vec[i, j]
+            n = [np.sin(theta)*np.cos(phi),
+                 np.sin(theta)*np.sin(phi),
+                 np.cos(theta)]
+            Gamma = christ_stiff(C, n)
+            vals = eigvalsh(Gamma)
+            V1[i, j] = vals[0]
+            V2[i, j] = vals[1]
+            V3[i, j] = vals[2]
+
+    return V1, V2, V3, phi_vec, theta_vec
+
+
+def plot_surf(R, phi, theta, title="Wave speed", **kwargs):
+    r"""Plot the surface given by R(phi, theta).
+
+    Parameters
+    ----------
+    R : (m,n) ndarray
+        Radius function.
+    phi_vec : (m,n) ndarray
+        Meshgrid for the azimut angle (phi).
+    theta_vec : (m,n) ndarray
+        Meshgrid for the cenit angle (theta).
+    **kwargs : keyword arguments (optional)
+        Keyword arguments for `mlab.mesh`.
+
+    Returns
+    -------
+    surf : mayavi mesh
+        Mayavi mesh for the surface `R(phi, theta)`.
+
+    """
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    X = R * np.cos(phi) * np.sin(theta)
+    Y = R * np.sin(phi) * np.sin(theta)
+    Z = R * np.cos(theta)
+    FC = np.sqrt(X * X + Y * Y + Z * Z)
+
+    # Set colormap bounds
+    vmax = FC.max()
+    vmin = FC.min()
+    FC = (FC - vmin) / (vmax - vmin)
+
+    # Fix aspect ratio
+    max_range = np.array([X.max() - X.min(), Y.max() - Y.min(),
+                          Z.max() - Z.min()]).max() / 2.0
+    mean_x = X.mean()
+    mean_y = Y.mean()
+    mean_z = Z.mean()
+    ax.set_xlim(mean_x - max_range, mean_x + max_range)
+    ax.set_ylim(mean_y - max_range, mean_y + max_range)
+    ax.set_zlim(mean_z - max_range, mean_z + max_range)
+
+    ax.plot_surface(X, Y, Z, facecolors=plt.cm.magma(FC),
+                    rstride=1, cstride=1, linewidth=0,
+                    antialiased=False)
+    return ax
 
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+    # beta-brass
+    C11 = 52
+    C12 = 27.5
+    C44 = 173
+    rho = 7600
+    C = np.zeros((6, 6))
+    C[0:3, 0:3] = np.array([[C11, C12, C12],
+                            [C12, C11, C12],
+                            [C12, C12, C11]])
+    C[3:6, 3:6] = np.diag([C44, C44, C44])
+    
+    
+    # Phi is the azimut angle
+    # theta is the cenital angle
+    V1, V2, V3, phi_vec, theta_vec = christofel_eig(C, 100, 100) 
+    V1 = np.sqrt(V1*1e9/rho)
+    V2 = np.sqrt(V2*1e9/rho)
+    V3 = np.sqrt(V3*1e9/rho)
+
+    plot_surf(V1, phi_vec, theta_vec)
+    plot_surf(V2, phi_vec, theta_vec)
+    plot_surf(V3, phi_vec, theta_vec)
+    plt.show()
