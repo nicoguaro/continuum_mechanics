@@ -2,9 +2,7 @@
 Solid mechanics module
 ----------------------
 
-
 """
-from __future__ import division, print_function
 from sympy import simplify, Matrix, S, symbols, eye
 from continuum_mechanics.vector import (grad, div, curl, lap_vec, grad_vec,
                                         dual_tensor, sym_grad)
