@@ -213,7 +213,7 @@ def christofel_eig(C, nphi=30, nth=30):
             n = [np.sin(theta)*np.cos(phi),
                  np.sin(theta)*np.sin(phi),
                  np.cos(theta)]
-            Gamma = christ_stiff(C, n)
+            Gamma = christ_stiff(C, n, numeric=True)
             vals = eigvalsh(Gamma)
             V1[i, j] = vals[0]
             V2[i, j] = vals[1]

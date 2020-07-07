@@ -2,7 +2,6 @@
 Continuum Mechanics
 ===================
 
-
 .. image:: https://img.shields.io/pypi/v/continuum_mechanics.svg
     :target: https://pypi.python.org/pypi/continuum_mechanics
 

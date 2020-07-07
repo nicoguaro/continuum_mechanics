@@ -12,7 +12,6 @@ History
 
 * Add elasticity operators.
 
-
 0.2.0 (2019-12-02)
 ------------------
 
@@ -21,3 +20,16 @@ History
 * Fix vector gradient for curvilinear coordinates.
 
 * Add divergence for second-order tensors.
+
+0.3.0 (2020)
+------------------
+
+* Extend 2D Mohr circle to asymmetric tensors.
+
+* Add Voigt notation.
+
+* Add Kelvin-Mandel notation.
+
+* Add Christofel stiffness for 4th order tensors.
+
+* Add visualization for 4th order tensors.
