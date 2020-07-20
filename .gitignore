@@ -171,3 +171,17 @@ Temporary Items
 
 # Bibtex
 *.bib.bak
+
+
+### Visual Studio Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+### Visual Studio Code Patch ###
+
+# Ignore all local history of files
+.history
