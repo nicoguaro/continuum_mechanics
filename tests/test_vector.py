@@ -3,7 +3,6 @@
 Test for vector at continuum_mechanics package
 
 """
-from __future__ import division, print_function
 import sympy as sym
 from sympy import symbols, sin, cos, Abs
 from sympy import Matrix, Function, diff
@@ -12,6 +11,7 @@ from continuum_mechanics.vector import (scale_coeff, levi_civita, dual_tensor,
                                         div_tensor, curl, lap, lap_vec)
 
 x, y, z = sym.symbols("x y z")
+
 
 #%% Curvilinear coordinates
 def test_scale_coeff():
@@ -24,6 +24,7 @@ def test_scale_coeff():
 
 def unit_vec_deriv():
     pass
+
 
 #%% Vector analysis
 def test_levi_civita():

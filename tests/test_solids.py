@@ -3,7 +3,6 @@
 Test for solids at continuum_mechanics package
 
 """
-from __future__ import division, print_function
 import sympy as sym
 from sympy import symbols, sin, cos, Abs
 from sympy import Matrix, simplify
@@ -13,7 +12,6 @@ x, y, z = sym.symbols("x y z")
 
 
 def test_navier_op():
-
     # Rotating cylinder in polar coordinates
     r, rho, Omega, E, nu, R = symbols("r rho Omega E nu R")
     coords = (r, y, z)
