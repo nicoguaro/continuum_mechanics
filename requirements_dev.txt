@@ -1,12 +1,12 @@
 -r requirements.txt
-pip==20.1.1
+pip==20.2.3
 bumpversion==0.6.0
-wheel==0.34.2
+wheel==0.35.1
 watchdog==0.10.3
 flake8==3.8.3
-tox==3.17.1
+tox==3.20.0
 coverage==5.2
-Sphinx==3.1.2
+Sphinx==3.2.1
 twine==3.2.0
 pytest==5.4.3
 pytest-runner==5.2
