@@ -27,7 +27,8 @@ plt.rcParams["axes.spines.top"] = False
 
 
 #%% Mohr circles
-def mohr2d(stress, ax=None):
+def mohr2d(stress, ax=None, show_center=True, show_line=True,
+           show_endpoints=True):
     """Plot Mohr circle for a 2D tensor
     
     Parameters
@@ -66,11 +67,14 @@ def mohr2d(stress, ax=None):
     ax.add_artist(circ)
     ax.set_xlim(Smin - .1*radius, Smax + .1*radius)
     ax.set_ylim(center[1] - 1.1*radius, center[1] + 1.1*radius)
-    plt.plot([S22, S11], [S21, -S12], 'ko')
-    plt.plot([S22, S11], [S21, -S12], 'k')
-    plt.plot(center[0], center[1], 'o', mfc='w')
-    plt.text(S22 + 0.1*radius, S21, 'A')
-    plt.text(S11 + 0.1*radius, -S12, 'B')
+    if show_line:
+        plt.plot([S22, S11], [S21, -S12], 'k')
+    if show_center:
+        plt.plot(center[0], center[1], 'o', mfc='w')
+    if show_endpoints:
+        plt.plot([S22, S11], [S21, -S12], 'ko')
+        plt.text(S22 + 0.1*radius, S21, 'A')
+        plt.text(S11 + 0.1*radius, -S12, 'B')
     plt.xlabel(r"$\sigma$", size=fontsize + 2)
     plt.ylabel(r"$\tau$", size=fontsize + 2)
     return ax
