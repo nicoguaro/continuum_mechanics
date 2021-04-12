@@ -21,3 +21,9 @@ History
 * Fix vector gradient for curvilinear coordinates.
 
 * Add divergence for second-order tensors.
+
+
+0.2.2 (2021-04-12)
+------------------
+
+* Python 3.6 support dropped.

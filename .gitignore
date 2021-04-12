@@ -185,3 +185,4 @@ Temporary Items
 
 # Ignore all local history of files
 .history
+.vscode/settings.json

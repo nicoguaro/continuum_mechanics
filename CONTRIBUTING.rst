@@ -45,7 +45,8 @@ articles, and such.
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://github.com/nicoguaro/continuum_mechanics/issues.
+The best way to send feedback is to file an issue at
+https://github.com/nicoguaro/continuum_mechanics/issues.
 
 If you are proposing a feature:
 
@@ -57,14 +58,17 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `continuum_mechanics` for local development.
+Ready to contribute? Here's how to set up `continuum_mechanics` for
+local development.
 
 1. Fork the `continuum_mechanics` repo on GitHub.
 2. Clone your fork locally::
 
     $ git clone git@github.com:your_name_here/continuum_mechanics.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Install your local copy into a virtualenv. Assuming you have
+   virtualenvwrapper installed, this is how you set up your fork for local
+   development::
 
     $ mkvirtualenv continuum_mechanics
     $ cd continuum_mechanics/
@@ -102,7 +106,7 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 3.6 and 3.7, and for PyPy. Check
+3. The pull request should work for Python 3.7 to 3.9, and for PyPy. Check
    https://travis-ci.org/nicoguaro/continuum_mechanics/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
