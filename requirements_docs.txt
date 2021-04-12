@@ -1,2 +1,2 @@
 -r requirements.txt
-continuum_mechanics
+continuum_mechanics==0.2.2
