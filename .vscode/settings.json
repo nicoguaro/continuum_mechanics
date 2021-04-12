@@ -2,5 +2,11 @@
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.pythonPath": "/home/nicoguaro/anaconda3/envs/continuum_mechanics/bin/python"
+    "python.pythonPath": "/home/nicoguaro/anaconda3/envs/continuum_mechanics/bin/python",
+    "spellright.language": [],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ]
 }
