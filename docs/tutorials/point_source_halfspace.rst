@@ -2,8 +2,10 @@
 Point source on top of a halfspace
 ==================================
 
-.. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fpoint_source_halfspace.ipynb
+.. only:: html
+
+    .. image:: https://mybinder.org/badge_logo.svg
+        :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fpoint_source_halfspace.ipynb
 
  To illustrate the use of the package we are going to play with the
  solutions for a concentrated force located on top of a halfspace. The
@@ -41,7 +43,7 @@ The following snippet allows to format the graphs.
 
     x, y, z, r, E, nu, Fx, Fy, Fz = symbols('x y z r E nu F_x F_y F_z')
 
-    The components of the displacement vector are given by [LANDAU]_
+The components of the displacement vector are given by [LANDAU]_
 
 .. math::
 

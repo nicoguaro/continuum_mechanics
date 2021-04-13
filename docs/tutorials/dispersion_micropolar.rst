@@ -2,8 +2,10 @@
 Dispersion relations in a micropolar medium
 ===========================================
 
-.. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fdispersion_micropolar.ipynb
+.. only:: html
+
+    .. image:: https://mybinder.org/badge_logo.svg
+    :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fdispersion_micropolar.ipynb
 
 We are interested in computing the dispersion relations in a homogeneous
 micropolar solid.
