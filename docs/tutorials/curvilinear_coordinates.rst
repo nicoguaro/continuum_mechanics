@@ -2,8 +2,10 @@
 Introduction to orthogonal coordinates
 ======================================
 
-.. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fcurvilinear_coordinates.ipynb
+.. only:: html
+
+    .. image:: https://mybinder.org/badge_logo.svg
+        :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Ftutorials%2Fcurvilinear_coordinates.ipynb
 
 In :math:`\mathbb{R}^3`, we can think that each point is given by the
 intersection of three surfaces. Thus, we have three families of curved

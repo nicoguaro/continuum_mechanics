@@ -12,8 +12,10 @@ import it as::
 Vector operators in Cartesian coordinates
 -----------------------------------------
 
-.. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Fcartesian_coordinates.ipynb
+.. only:: html
+
+    .. image:: https://mybinder.org/badge_logo.svg
+        :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Fcartesian_coordinates.ipynb
 
 ``continuum_mechanics`` support major vector operators such as:
 
@@ -170,8 +172,10 @@ Let us check the identity
 Visualization of tensors
 ------------------------
 
-.. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Fvisualization.ipynb
+.. only::
+
+    .. image:: https://mybinder.org/badge_logo.svg
+        :target: https://mybinder.org/v2/gh/nicoguaro/continuum_mechanics/master?filepath=docs%2Fvisualization.ipynb
 
 .. code:: python
 
