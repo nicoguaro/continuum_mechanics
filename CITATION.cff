@@ -1,0 +1,34 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Continuum Mechanics
+message: >-
+  Utilities for doing calculations in continuum
+  mechanics.
+type: software
+authors:
+  - given-names: Nicolás
+    family-names: Guarín-Zapata
+    email: nicoguarin@gmail.com
+    orcid: 'https://orcid.org/0000-0002-9435-1914'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.4029448
+    description: Zenodo DOI
+repository-code: 'https://github.com/nicoguaro/continuum_mechanics'
+abstract: >-
+  `continuum_mechanics` is a Python package built on
+  top of SymPy to aid with calculations in Continuum
+  Mechanics that are commonly lengthy and tedious if
+  done by hand. It also provides visualization
+  capabilities for second-order tensors such as
+  Mohr's circle to help in stress analyses.
+keywords:
+  - continuum mechanics
+  - elasticity
+  - python
+  - stress analysis
+  - mechanics
+  - tensor analysis
+license: MIT
